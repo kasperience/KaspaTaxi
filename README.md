@@ -4,7 +4,7 @@
   <p><strong>Decentralized Ride-Booking leveraging Kaspa</strong></p>
   <p>
     <a href="https://kaspataxi.KASperience.xyz">Official Demo</a> •
-    <a href="#key-features-mvp">Features</a> •
+    <a href="#key-features-mvp---currently-functional">Features</a> •
     <a href="#getting-started">Getting Started</a> •
     <a href="#contribution-guidelines">Contribute</a> •
     <a href="#license">License</a> •
