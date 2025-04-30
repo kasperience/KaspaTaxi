@@ -1,0 +1,82 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Users Collection Rules
+    match /users/{userId} {
+      // Allow users to read and update their own profile information.
+      // Allow authenticated users to read basic info if it's a driver profile (adjust fields as needed).
+      allow read: if request.auth != null && (
+                    request.auth.uid == userId || // User can read their own profile
+                    (resource.data.isDriver == true) // Allow reading basic driver info (e.g., for lists) - refine what fields are readable if needed
+                  );
+
+      // Allow users to create their own profile document.
+      allow create: if request.auth != null && request.auth.uid == userId;
+
+      // Allow users to update their own profile. Add validation if necessary.
+      // Example: ensure they don't change immutable fields or grant themselves driver status without a backend process.
+      allow update: if request.auth != null && request.auth.uid == userId; // && !request.resource.data.containsKey('isDriver'); // Example validation
+
+      // Disallow direct deletion of user profiles from the client.
+      allow delete: if false;
+    }
+
+    // Rides Collection Rules
+    match /rides/{rideId} {
+      // Allow authenticated users to read rides where they are the rider or the assigned driver.
+      // Allow authenticated users (potential drivers) to read 'pending' rides.
+      allow read: if request.auth != null && (
+                    resource.data.riderId == request.auth.uid ||
+                    resource.data.driverId == request.auth.uid ||
+                    resource.data.status == 'pending' // Drivers need to see pending requests
+                  );
+
+      // Allow authenticated users to create a new ride request for themselves.
+      // Validate that the riderId matches the user making the request and necessary fields exist.
+      allow create: if request.auth != null
+                    && request.resource.data.riderId == request.auth.uid
+                    && request.resource.data.status == 'pending' // Ensure initial status is pending
+                    && request.resource.data.driverId == null // Ensure no driver assigned at creation
+                    && request.resource.data.containsKey('pickupLocation') // Basic validation
+                    && request.resource.data.containsKey('dropoffLocation'); // Basic validation
+
+      // Allow updates under specific conditions:
+      allow update: if request.auth != null && (
+                      // Condition 1: A driver accepting a pending ride
+                      ( resource.data.status == 'pending' && request.resource.data.status == 'accepted' // Transitioning to accepted
+                        && resource.data.driverId == null && request.resource.data.driverId == request.auth.uid // Assigning self as driver
+                        // Add check if the user is actually a driver (reading their user profile)
+                        // && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isDriver == true
+                      ) ||
+                      // Condition 2: Rider cancelling a pending ride
+                      ( resource.data.status == 'pending' && request.resource.data.status == 'cancelled'
+                        && resource.data.riderId == request.auth.uid // Only rider can cancel pending
+                      ) ||
+                      // Condition 3: Driver updating status (ongoing, completed, cancelled by driver)
+                      ( resource.data.driverId == request.auth.uid // Must be the assigned driver
+                        && resource.data.status in ['accepted', 'ongoing'] // Can update from these states
+                        && request.resource.data.status in ['ongoing', 'completed', 'cancelled'] // To these states
+                        // Add validation for status transitions if needed
+                      ) ||
+                      // Condition 4: Rider cancelling an accepted (but not ongoing) ride - Optional
+                      ( resource.data.status == 'accepted' && request.resource.data.status == 'cancelled'
+                        && resource.data.riderId == request.auth.uid
+                      )
+                      // Add more conditions for other updates (e.g., updating location during ride by driver)
+                    );
+
+
+      // Disallow direct deletion of rides from the client.
+      allow delete: if false;
+    }
+
+    // Add rules for other collections like 'driverLocations' if needed
+    // match /driverLocations/{driverId} {
+    //   allow read: if request.auth != null; // Allow riders to see driver locations
+    //   allow write: if request.auth != null && request.auth.uid == driverId; // Only driver can update their own location
+    // }
+
+  }
+}
