@@ -1,6 +1,8 @@
-MIT License
+# License
 
-Copyright (c) 2025 Kasperience
+## MIT License
+
+Copyright (c) 2024 KaspaTaxi
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +21,17 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## Commercial Use and Customization
+
+KaspaTaxi is an open-source project, freely available under the MIT license. We believe in the power of community and open collaboration. However, we also recognize the unique needs of businesses and other blockchain projects seeking to leverage KaspaTaxi for commercial purposes.
+
+If you are a corporate client looking to integrate KaspaTaxi into your taxi software or a blockchain project interested in extending KaspaTaxi to support custom currencies, including KRC20 tokens or future stable coins on the Kaspa network, we are here to help.
+
+We offer customization services to tailor KaspaTaxi to your specific requirements. Whether you need to adapt the platform to handle different payment methods, integrate with your existing systems, or create a branded user experience, our team is equipped to deliver a solution that meets your needs.
+
+**Ready to explore the possibilities?**
+
+[Get a Quote](mailto:sales@kasperience.xyz?subject=KaspaTaxi%20Customization%20Quote%20Request)
+
+Contact us today to discuss your project and receive a personalized quote. Let's build the future of transportation together!
