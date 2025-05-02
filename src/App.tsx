@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
-import { CarTaxiFront as Taxi, CreditCard, Shield, MapPin, Wallet, Navigation, Github, Twitter, MessageSquare } from 'lucide-react';
+import { CarTaxiFront as Taxi, CreditCard, Shield, MapPin, Wallet, Navigation, MessageSquare } from 'lucide-react';
+import { Github, Twitter } from 'lucide-react';
 import DriverApp from './components/DriverApp';
 import WebApp from './components/WebApp';
 import TermsOfService from './components/TermsOfService';
@@ -10,28 +11,15 @@ import FooterDonation from './components/FooterDonation';
 import Contributing from './components/Contributing';
 import Readme from './components/Readme';
 import License from './components/License';
+import EmailQuoteButton from './components/EmailQuoteButton';
 
 const LandingPage = () => {
   const navigate = useNavigate();
-  const [isSelecting, setIsSelecting] = useState<boolean>(false);
-  const [selectionType, setSelectionType] = useState<"pickup" | "dropoff" | null>(null);
-  const [pickupCoords, setPickupCoords] = useState<[number, number] | null>(null);
-  const [dropoffCoords, setDropoffCoords] = useState<[number, number] | null>(null);
-
-  const handlePickupSelect = (coords: [number, number]) => {
-    setPickupCoords(coords);
-    setIsSelecting(false);
-  };
-
-  const handleDropoffSelect = (coords: [number, number]) => {
-    setDropoffCoords(coords);
-    setIsSelecting(false);
-  };
-
 
   const handleBookRideClick = () => {
     navigate('/app');
   };
+
   const handleBecomeDriverClick = () => {
     navigate('/driver');
   };
@@ -68,13 +56,16 @@ const LandingPage = () => {
             <p className="text-xl md:text-2xl text-white mb-8">
               Ride smart, pay smart
             </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <div className="flex flex-col sm:flex-row justify-center gap-4 mb-6">
               <button
               onClick={handleBookRideClick}
               className="bg-[#F1C40F] text-gray-900 px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-[#1ABC9C] transition-colors">Book a Ride</button>
                <button onClick={handleBecomeDriverClick} className="bg-white text-[#1ABC9C] px-8 py-3 rounded-lg font-semibold hover:bg-[#F1C40F] hover:text-gray-900 transition-colors">
                 Become a Driver
               </button>
+            </div>
+            <div className="flex justify-center">
+              <EmailQuoteButton className="bg-[#16A085] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#0E6655] transition-colors" />
             </div>
           </div>
       </div>
@@ -213,7 +204,7 @@ const LandingPage = () => {
               <ul className="space-y-2">
                 <li><Link to="/contributing" className="text-gray-400 hover:text-white transition-colors">Contribution Guidelines</Link></li>
                 <li><Link to="/readme" className="text-gray-400 hover:text-white transition-colors">Documentation</Link></li>
-                {/* Removed the Security link */}              
+                {/* Removed the Security link */}
               </ul>
             </div>
             <div>
