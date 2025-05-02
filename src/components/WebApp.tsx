@@ -49,12 +49,13 @@ const WebApp: React.FC = () => {
 
   // Geolocation hook depends on ride status
   const { location } = useGeolocation(
+    // Track location when user is logged in and has an active ride
     user !== null &&
     currentRideId !== null &&
     ride !== null &&
     ['accepted', 'in progress'].includes(ride.status),
     currentRideId || undefined,
-    'rider'
+    'rider' // Explicitly set role to 'rider'
   );
 
   const showMyLocationOnMap = true; // Always show user's location if available

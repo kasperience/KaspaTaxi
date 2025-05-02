@@ -33,7 +33,8 @@ const DriverApp: React.FC = () => {
 
   const { location } = useGeolocation(
     user !== null && activeRide !== null && ['accepted', 'in progress'].includes(activeRide.status),
-    activeRide?.id
+    activeRide?.id,
+    'driver' // Explicitly set role to 'driver' to ensure correct field updates
   );
 
   // Fetch Kaspa price

@@ -6,7 +6,25 @@ export const createMarkerElement = (
   size: string = '2xl'
 ): HTMLElement => {
   const el = document.createElement('div');
-  el.innerHTML = `<i class="${iconClass} text-${color}-500 text-${size} drop-shadow-lg"></i>`;
+
+  // Check if this is a driver marker (car icon)
+  const isDriverMarker = iconClass.includes('fa-car');
+
+  if (isDriverMarker) {
+    // Create a more visible driver marker with a background
+    el.innerHTML = `
+      <div class="relative">
+        <div class="absolute -inset-1 rounded-full bg-yellow-400 opacity-50"></div>
+        <div class="relative bg-[${color}] text-white p-2 rounded-full shadow-lg">
+          <i class="${iconClass} text-${size}"></i>
+        </div>
+      </div>
+    `;
+  } else {
+    // Standard marker for other types
+    el.innerHTML = `<i class="${iconClass} text-${color} text-${size} drop-shadow-lg"></i>`;
+  }
+
   el.style.width = 'auto';
   el.style.height = 'auto';
   el.style.cursor = 'pointer';

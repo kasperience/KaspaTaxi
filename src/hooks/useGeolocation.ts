@@ -11,15 +11,33 @@ export const useGeolocation = (
 ): { location: LatLng | null; geoPoint: GeoPoint | null } => {
   const [location, setLocation] = useState<LatLng | null>(null);
   const watchIdRef = useRef<number | null>(null);
+  const lastUpdateTimeRef = useRef<number>(0);
+  const UPDATE_INTERVAL = 2000; // Update database every 2 seconds to avoid excessive writes
 
   const updateLocation = (latitude: number, longitude: number) => {
     const newLocation: LatLng = [longitude, latitude];
     setLocation(newLocation);
+
+    // Always update the database when tracking is enabled and we have a ride ID
     if (track && rideId) {
-      const field = role === 'driver' ? 'driverLocation' : 'riderLocation';
-      updateRide(rideId, { [field]: new GeoPoint(latitude, longitude) }).catch((error) =>
-        console.error(`Error updating ${role} location:`, error)
-      );
+      const currentTime = Date.now();
+
+      // Only update the database if enough time has passed since the last update
+      // This prevents excessive database writes while still ensuring regular updates
+      if (currentTime - lastUpdateTimeRef.current > UPDATE_INTERVAL) {
+        const field = role === 'driver' ? 'driverLocation' : 'riderLocation';
+        const geoPoint = new GeoPoint(latitude, longitude);
+
+        console.log(`Updating ${role} location for ride ${rideId}:`, [longitude, latitude]);
+
+        updateRide(rideId, { [field]: geoPoint })
+          .then(() => {
+            lastUpdateTimeRef.current = currentTime;
+          })
+          .catch((error) => {
+            console.error(`Error updating ${role} location:`, error);
+          });
+      }
     }
   };
 

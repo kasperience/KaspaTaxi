@@ -27,6 +27,14 @@ const Map: React.FC<MapProps> = ({
     trackUserLocation,
   });
 
+  // Log marker locations for debugging
+  if (driverLocation) {
+    console.log('Map rendering driver location:', driverLocation);
+  }
+  if (riderLocation) {
+    console.log('Map rendering rider location:', riderLocation);
+  }
+
   const markers: MarkerConfig[] = [
     {
       id: 'pickup',
@@ -51,6 +59,8 @@ const Map: React.FC<MapProps> = ({
       color: '#F1C40F', // Yellow/taxi color for driver
       size: '3xl',
       popupText: 'Driver',
+      // Make driver marker always visible and prominent
+      zIndexOffset: 1000,
     },
     {
       id: 'rider',

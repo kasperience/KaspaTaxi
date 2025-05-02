@@ -50,15 +50,19 @@ export const useRide = (
           const rideData = { id: doc.id, ...doc.data() } as Ride;
           setRide(rideData);
 
+          // Handle driver location updates
           if (rideData.driverLocation instanceof GeoPoint) {
             const newDriverLoc: LatLng = [
               rideData.driverLocation.longitude,
               rideData.driverLocation.latitude,
             ];
-            setDriverLocation((prev) =>
-              !prev || prev[0] !== newDriverLoc[0] || prev[1] !== newDriverLoc[1] ? newDriverLoc : prev
-            );
+
+            console.log('Rider app received driver location update:', newDriverLoc);
+
+            // Always update if we have a new location
+            setDriverLocation(newDriverLoc);
           } else {
+            console.log('No driver location data available in ride object');
             setDriverLocation(null);
           }
 

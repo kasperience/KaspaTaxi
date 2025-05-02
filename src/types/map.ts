@@ -20,4 +20,5 @@ export interface MarkerConfig {
   color?: string;
   size?: string;
   popupText?: string;
+  zIndexOffset?: number; // Control marker stacking order
 }
