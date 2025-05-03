@@ -1,6 +1,6 @@
 // src/components/DriverApp.tsx
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../hooks/useAuth';
+import { useAuthSecure } from '../hooks/useAuthSecure';
 import { useGeolocation } from '../hooks/useGeolocation';
 import { useDriver } from '../hooks/useDriver';
 import AuthPanel from './AuthPanel';
@@ -17,7 +17,7 @@ const DriverApp: React.FC = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
 
-  const { user, signIn, signOut } = useAuth();
+  const { user, loading, error, signIn, signOut } = useAuthSecure();
 
   const {
     pendingRides,
@@ -146,6 +146,32 @@ const DriverApp: React.FC = () => {
       alert('Failed to save.');
     }
   };
+
+  // Handle loading and error states
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#1ABC9C] flex items-center justify-center">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-[#1ABC9C] flex items-center justify-center">
+        <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+          <h2 className="text-xl font-bold text-red-600 mb-4">Authentication Error</h2>
+          <p className="text-gray-700 mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="bg-[#1ABC9C] text-white px-4 py-2 rounded-lg"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#1ABC9C] relative">

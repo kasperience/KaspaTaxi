@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useMemo } from 'react';
 import maplibregl, { Map as MaplibreMap } from 'maplibre-gl';
 import { LatLng, MapProps } from '../types/map';
 
@@ -18,9 +18,15 @@ export const useMap = ({
   const lastDragTimeRef = useRef(0);
   const previewMarkerRef = useRef<maplibregl.Marker | null>(null);
 
-  const apiKey = import.meta.env.VITE_MAPTILER_API_KEY;
-  const mapStyle = `https://api.maptiler.com/maps/streets-v2/style.json?key=${apiKey}`;
-  const defaultCenter: LatLng = [21.0122, 52.2297]; // Warsaw
+  // Use the proxied server endpoint instead of direct API key
+  const mapStyle = `/api/maptiler/style`;
+
+  // Alternatively, we could use the API service:
+  // import { mapTilerAPI } from '../services/api';
+  // const mapStyle = await mapTilerAPI.getMapStyle();
+
+  // Use useMemo to prevent unnecessary re-renders
+  const defaultCenter = useMemo<LatLng>(() => [21.0122, 52.2297], []); // Warsaw
   const defaultZoom = 12;
 
   useEffect(() => {
@@ -38,7 +44,6 @@ export const useMap = ({
     const geolocate = new maplibregl.GeolocateControl({
       positionOptions: { enableHighAccuracy: true },
       trackUserLocation: false,
-      showUserHeading: true,
       showUserLocation: true,
     });
     mapRef.current.addControl(geolocate, 'top-right');
@@ -185,7 +190,7 @@ export const useMap = ({
       setMapFullyLoaded(false);
       geolocateTriggeredRef.current = false;
     };
-  }, [containerRef, apiKey, mapStyle, isSelecting, onMapClick, trackUserLocation]);
+  }, [containerRef, mapStyle, isSelecting, onMapClick, trackUserLocation, defaultCenter, defaultZoom]);
 
   useEffect(() => {
     if (!mapRef.current || !mapFullyLoaded) return;

@@ -106,12 +106,25 @@ Experience the current KaspaTaxi MVP in action: [kaspataxi.KASperience.xyz](http
         # Make sure you are in the project's root directory (where firebase.json is, after running init)
         firebase deploy --only firestore:rules
         ```
-5.  **Run the Development Server:**
+5.  **Server Setup (for API Key Security):**
+    * Navigate to the server directory: `cd server`
+    * Install server dependencies: `npm install`
+    * Create a `.env` file in the server directory with your API keys:
+      ```
+      PORT=3001
+      MAPTILER_API_KEY=YOUR_MAPTILER_API_KEY
+      ```
+    * Return to the main directory: `cd ..`
+
+6.  **Run the Development Server:**
     ```bash
-    # Ensure you are in the kaspaTaxi sub-directory
+    # Run both the client and server
+    npm run dev:all
+
+    # Or run just the client (if you don't need the server features)
     npm run dev
     ```
-6.  **IDX Configuration (If applicable):**
+7.  **IDX Configuration (If applicable):**
     *   Ensure necessary environment variables (like Firebase keys if not using `.env` for IDX) are configured in `.idx/dev.nix`.
     *   Rebuild the environment if needed within IDX.
 
@@ -134,9 +147,12 @@ Experience the current KaspaTaxi MVP in action: [kaspataxi.KASperience.xyz](http
 
 ## Security Considerations
 
+*   **API Key Security:** We use a secure server-side approach to handle API keys. See [API_KEY_SECURITY.md](API_KEY_SECURITY.md) for details.
+*   **Secure API Architecture:** Our architecture follows security best practices for protecting sensitive operations. See [SECURE_API_APPROACH.md](SECURE_API_APPROACH.md) for details.
 *   **Map Access:** The map is only accessible to authenticated users. Both WebApp and DriverApp components require user login to display the map and related functionality.
-*   **Environment Variables:** Use `.env` for local development. For production, move sensitive keys (like Firebase Admin SDK keys) to secure server-side environments (e.g., Cloud Functions environment variables), *not* client-side code.
+*   **Environment Variables:** Use `.env` for local development. For production, move sensitive keys (like Firebase Admin SDK keys) to secure server-side environments (e.g., Cloud Functions environment variables), *not* client-side code. API keys like MapTiler are now handled by the Express server in the `server` directory, which provides a secure proxy for these services.
 *   **Firebase Security Rules:** Implement robust Firestore rules to control data access based on authentication and user roles. **(Remember to deploy your rules using the Firebase CLI as described in the 'Getting Started' section).** See details below.
+*   **Authentication:** We use Firebase Authentication with secure token verification on the server side.
 *   **Kaspa Transaction Verification (Future):** Implement server-side verification to prevent spoofed payment confirmations.
 
 ### Firestore Security Rules Details

@@ -1,6 +1,6 @@
 // src/components/WebApp.tsx
 import React, { useState, useCallback, useEffect } from 'react';
-import { useAuth } from '../hooks/useAuth';
+import { useAuthSecure } from '../hooks/useAuthSecure';
 import { useGeolocation } from '../hooks/useGeolocation';
 import { useRide } from '../hooks/useRide';
 import { requestRide, updateRide, calculateFare, getAverageDriverRate } from '../utils/firebaseUtils';
@@ -16,7 +16,7 @@ import { db } from '../firebase'; // Ensure db is exported from your firebase.ts
 import { Ride } from '../types/ride';
 
 const WebApp: React.FC = () => {
-  const { user, signIn, signOut } = useAuth();
+  const { user, loading, error, signIn, signOut } = useAuthSecure();
   const [pickupCoords, setPickupCoords] = useState<LatLng | null>(null);
   const [dropoffCoords, setDropoffCoords] = useState<LatLng | null>(null);
   const [selectionMode, setSelectionMode] = useState<'pickup' | 'dropoff' | null>(null);
@@ -231,6 +231,32 @@ const WebApp: React.FC = () => {
 
 
   // handleNewRide is now defined earlier in the component
+
+  // Handle loading and error states
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#1ABC9C] flex items-center justify-center">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-[#1ABC9C] flex items-center justify-center">
+        <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+          <h2 className="text-xl font-bold text-red-600 mb-4">Authentication Error</h2>
+          <p className="text-gray-700 mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="bg-[#1ABC9C] text-white px-4 py-2 rounded-lg"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#1ABC9C] relative">
