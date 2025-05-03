@@ -9,6 +9,7 @@ import AuthPanel from './AuthPanel';
 import RideControls from './RideControls';
 import RideStatus from './RideStatus';
 import Map from './Map';
+import ConfirmationModal from './ConfirmationModal';
 import { LatLng } from '../types/map';
 // Import Firestore functions and db instance from existing utils
 import { GeoPoint, deleteField, collection, query, where, getDocs, limit } from 'firebase/firestore';
@@ -27,6 +28,9 @@ const WebApp: React.FC = () => {
   const [fareEstimate, setFareEstimate] = useState<{ fareUSD: number; fareKAS: number } | null>(null);
   const [isLoadingRide, setIsLoadingRide] = useState(true); // State to track if we are checking for an existing ride
   const [averageDriverRate, setAverageDriverRate] = useState(1.5); // Default rate until we fetch the actual average
+
+  // State for confirmation modal
+  const [showCancelModal, setShowCancelModal] = useState(false);
 
   // Define handleNewRide function early so it can be used in the useRide callback
   const handleNewRide = () => {
@@ -193,21 +197,60 @@ const WebApp: React.FC = () => {
     }
   };
 
+  // State for cancel confirmation
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const [cancelConfirmMessage, setCancelConfirmMessage] = useState('');
+  const [cancelConfirmTitle, setCancelConfirmTitle] = useState('');
+
+  const handleCancelRequest = () => {
+    // Allow cancellation only if the ride exists and is in an appropriate state ('pending' or 'accepted')
+    if (!currentRideId || !ride || (ride.status !== 'pending' && ride.status !== 'accepted')) return;
+
+    // Set appropriate message based on ride status
+    if (ride.status === 'pending') {
+      setCancelConfirmTitle('Cancel Ride Request');
+      setCancelConfirmMessage('Are you sure you want to cancel your ride request? No driver has accepted it yet.');
+    } else {
+      setCancelConfirmTitle('Cancel Ride');
+      setCancelConfirmMessage('Are you sure you want to cancel this ride? The driver is waiting for you.');
+    }
+
+    // Show the confirmation modal
+    setShowCancelConfirm(true);
+  };
+
   const handleCancel = async () => {
-    // Allow cancellation only if the ride exists and is in an appropriate state (e.g., 'accepted')
-    if (!currentRideId || !ride || ride.status !== 'accepted') return;
     try {
       // Use a more generic type for updates to accommodate deleteField()
       const updates: { [key: string]: unknown } = {
         status: 'cancelled',
-        riderLocation: deleteField(), // Remove locations on cancellation
-        driverLocation: deleteField(),
       };
-      await updateRide(currentRideId, updates);
-      setCurrentRideId(null); // Clear the current ride ID
+
+      // Only remove location fields if they exist
+      if (ride?.riderLocation) {
+        updates.riderLocation = deleteField();
+      }
+
+      if (ride?.driverLocation) {
+        updates.driverLocation = deleteField();
+      }
+
+      if (currentRideId) {
+        await updateRide(currentRideId, updates);
+      }
+
+      // Clear the current ride ID to allow requesting a new ride
+      setCurrentRideId(null);
+
+      // Reset map selections
+      setPickupCoords(null);
+      setDropoffCoords(null);
     } catch (error) {
       console.error('Error cancelling ride:', error);
       alert('Failed to cancel ride.');
+    } finally {
+      // Close the confirmation modal
+      setShowCancelConfirm(false);
     }
   };
 
@@ -288,11 +331,23 @@ const WebApp: React.FC = () => {
                   <RideStatus
                     ride={ride}
                     statusMessage={statusMessage || "Loading ride details..."}
-                    onCancel={handleCancel}
+                    onCancel={handleCancelRequest}
                     onCopy={handleCopy}
                     onNewRide={handleNewRide}
                   />
                 )}
+
+                {/* Confirmation Modal for Ride Cancellation */}
+                <ConfirmationModal
+                  isOpen={showCancelConfirm}
+                  title={cancelConfirmTitle}
+                  message={cancelConfirmMessage}
+                  confirmText="Yes, Cancel"
+                  cancelText="No, Keep Ride"
+                  onConfirm={handleCancel}
+                  onCancel={() => setShowCancelConfirm(false)}
+                  type="warning"
+                />
 
                 <div className="w-full max-w-md mx-auto h-96 mt-8 bg-white rounded-lg shadow-lg overflow-hidden">
                   <Map

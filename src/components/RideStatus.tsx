@@ -39,6 +39,17 @@ const RideStatus: React.FC<RideStatusProps> = ({ ride, statusMessage, onCancel, 
           )}
         </div>
       )}
+      {ride && ride.status === 'pending' && (
+        <div className="mb-8 p-6 bg-white rounded-lg shadow-lg text-center">
+          <p className="text-gray-600 mb-3">Waiting for a driver. You can cancel your ride request at any time.</p>
+          <button
+            onClick={onCancel}
+            className="bg-[#1ABC9C] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#16a085] transition-colors animate-pulse"
+          >
+            Cancel Request
+          </button>
+        </div>
+      )}
       {ride && ride.status === 'accepted' && (
         <div className="mb-8 p-6 bg-white rounded-lg shadow-lg text-center">
           <p className="text-gray-600 mb-3">You can cancel the ride before the driver starts it.</p>

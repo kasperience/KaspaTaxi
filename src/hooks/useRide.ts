@@ -14,8 +14,10 @@ export const useRide = (
   const [driverLocation, setDriverLocation] = useState<LatLng | null>(null);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
-  // Ref to store the auto-clear timeout
+  // Refs to store timeouts
   const autoClearTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const pendingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const warningTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Function to clear the current ride after a delay
   const autoClearRide = useCallback((status: string, delay: number) => {
@@ -34,6 +36,97 @@ export const useRide = (
     }, delay);
   }, [onRideComplete]);
 
+  // Function to auto-cancel a pending ride after a timeout
+  const setupPendingTimeout = useCallback((rideData: Ride) => {
+    // Only set up timeout for pending rides
+    if (rideData.status !== 'pending') {
+      if (pendingTimeoutRef.current) {
+        clearTimeout(pendingTimeoutRef.current);
+        pendingTimeoutRef.current = null;
+      }
+      return;
+    }
+
+    // Clear any existing timeout
+    if (pendingTimeoutRef.current) {
+      clearTimeout(pendingTimeoutRef.current);
+      pendingTimeoutRef.current = null;
+    }
+
+    // Calculate time since ride was created
+    const now = new Date();
+    const rideTime = rideData.timestamp?.toDate() || now;
+    const elapsedMs = now.getTime() - rideTime.getTime();
+
+    // Auto-cancel after 10 minutes (600000 ms) of waiting
+    const maxWaitTime = 600000; // 10 minutes in milliseconds
+
+    // Add a warning at 8 minutes (480000 ms)
+    const warningTime = 480000; // 8 minutes in milliseconds
+
+    const remainingTime = Math.max(0, maxWaitTime - elapsedMs);
+    const warningRemainingTime = Math.max(0, warningTime - elapsedMs);
+
+    if (elapsedMs < maxWaitTime) {
+      console.log(`Setting up auto-cancel timeout for ride ${rideData.id} in ${remainingTime}ms`);
+
+      // Set up warning timeout if we haven't passed the warning time yet
+      if (elapsedMs < warningTime) {
+        // Clear any existing warning timeout
+        if (warningTimeoutRef.current) {
+          clearTimeout(warningTimeoutRef.current);
+          warningTimeoutRef.current = null;
+        }
+
+        warningTimeoutRef.current = setTimeout(() => {
+          // Show a warning to the user that the ride will be auto-cancelled soon
+          const warningMessage = 'Your ride request will be automatically cancelled in 2 minutes if no driver accepts it. You can cancel it now or continue waiting.';
+
+          // We're using alert here, but in a real app you might want a more elegant notification
+          alert(warningMessage);
+
+          warningTimeoutRef.current = null;
+        }, warningRemainingTime);
+      }
+
+      pendingTimeoutRef.current = setTimeout(async () => {
+        try {
+          // Import needed functions
+          const { updateRide } = await import('../utils/firebaseUtils');
+
+          // Show final confirmation before auto-cancelling
+          const confirmMessage = 'No driver has accepted your ride request in the last 10 minutes. The request will now be cancelled.';
+          alert(confirmMessage);
+
+          // Update the ride status to cancelled
+          await updateRide(rideData.id, { status: 'cancelled' });
+          console.log(`Auto-cancelled pending ride ${rideData.id} after timeout`);
+
+          // Status will be updated by the onSnapshot listener
+        } catch (error) {
+          console.error('Error auto-cancelling ride:', error);
+        }
+        pendingTimeoutRef.current = null;
+      }, remainingTime);
+    } else if (rideData.status === 'pending') {
+      // If the ride is already past the timeout, cancel it immediately
+      console.log(`Ride ${rideData.id} has exceeded maximum wait time, cancelling now`);
+
+      // Show notification to user
+      const timeoutMessage = 'Your ride request has been waiting for more than 10 minutes with no driver response. It will now be cancelled.';
+      alert(timeoutMessage);
+
+      (async () => {
+        try {
+          const { updateRide } = await import('../utils/firebaseUtils');
+          await updateRide(rideData.id, { status: 'cancelled' });
+        } catch (error) {
+          console.error('Error auto-cancelling ride:', error);
+        }
+      })();
+    }
+  }, []);
+
   useEffect(() => {
     if (!userId || !rideId) {
       setRide(null);
@@ -49,6 +142,9 @@ export const useRide = (
         if (doc.exists()) {
           const rideData = { id: doc.id, ...doc.data() } as Ride;
           setRide(rideData);
+
+          // Set up auto-cancel timeout for pending rides
+          setupPendingTimeout(rideData);
 
           // Handle driver location updates
           if (rideData.driverLocation instanceof GeoPoint) {
@@ -68,7 +164,7 @@ export const useRide = (
 
           switch (rideData.status) {
             case 'pending':
-              setStatusMessage('Waiting for a driver to accept your ride...');
+              setStatusMessage('Waiting for a driver to accept your ride. You can cancel anytime. Ride will auto-cancel after 10 minutes if no driver accepts.');
               break;
             case 'accepted':
               setStatusMessage('Ride accepted! Waiting for driver to start...');
@@ -113,8 +209,20 @@ export const useRide = (
         clearTimeout(autoClearTimeoutRef.current);
         autoClearTimeoutRef.current = null;
       }
+
+      // Clear pending ride timeout
+      if (pendingTimeoutRef.current) {
+        clearTimeout(pendingTimeoutRef.current);
+        pendingTimeoutRef.current = null;
+      }
+
+      // Clear warning timeout
+      if (warningTimeoutRef.current) {
+        clearTimeout(warningTimeoutRef.current);
+        warningTimeoutRef.current = null;
+      }
     };
-  }, [userId, rideId]);
+  }, [userId, rideId, setupPendingTimeout]);
 
   return { ride, driverLocation, statusMessage };
 };

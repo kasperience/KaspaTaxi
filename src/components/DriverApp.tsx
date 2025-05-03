@@ -8,6 +8,7 @@ import DriverSettings from './DriverSettings';
 import PendingRidesList from './PendingRidesList';
 import ActiveRidePanel from './ActiveRidePanel';
 import RideHistoryPanel from './RideHistoryPanel';
+import ConfirmationModal from './ConfirmationModal';
 import { updateRide, saveDriverSettings, calculateFare } from '../utils/firebaseUtils';
 import { Ride } from '../types/ride';
 import { deleteField, serverTimestamp } from 'firebase/firestore';
@@ -17,7 +18,28 @@ const DriverApp: React.FC = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
 
+  // Confirmation modal states
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [confirmTitle, setConfirmTitle] = useState('');
+  const [confirmMessage, setConfirmMessage] = useState('');
+  const [confirmAction, setConfirmAction] = useState<() => Promise<void>>(() => Promise.resolve());
+  const [confirmType, setConfirmType] = useState<'warning' | 'info' | 'success'>('warning');
+
   const { user, loading, error, signIn, signOut } = useAuthSecure();
+
+  // Helper function to show confirmation modal
+  const showConfirmation = (
+    title: string,
+    message: string,
+    action: () => Promise<void>,
+    type: 'warning' | 'info' | 'success' = 'warning'
+  ) => {
+    setConfirmTitle(title);
+    setConfirmMessage(message);
+    setConfirmAction(() => action);
+    setConfirmType(type);
+    setShowConfirmModal(true);
+  };
 
   const {
     pendingRides,
@@ -55,7 +77,7 @@ const DriverApp: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleAcceptRide = async (rideId: string) => {
+  const handleAcceptRide = (rideId: string) => {
     if (!user || !settings.kaspaAddress) {
       alert('Please set Kaspa address in settings.');
       return;
@@ -64,31 +86,86 @@ const DriverApp: React.FC = () => {
       alert('Cannot accept multiple rides.');
       return;
     }
-    try {
-      // Hide history section when accepting a ride
-      if (showHistory) {
-        setShowHistory(false);
-      }
 
-      await updateRide(rideId, {
-        status: 'accepted',
-        driverId: user.uid,
-        driverKaspaAddress: settings.kaspaAddress,
-        driverRatePerKm: settings.ratePerKm,
-      });
-    } catch (error) {
-      console.error(`Error accepting ride ${rideId}:`, error);
-      alert('Failed to accept.');
-    }
+    // Show confirmation modal for accepting a ride
+    showConfirmation(
+      'Accept Ride',
+      'Are you sure you want to accept this ride? You will be responsible for picking up the rider.',
+      async () => {
+        try {
+          // Hide history section when accepting a ride
+          if (showHistory) {
+            setShowHistory(false);
+          }
+
+          await updateRide(rideId, {
+            status: 'accepted',
+            driverId: user.uid,
+            driverKaspaAddress: settings.kaspaAddress,
+            driverRatePerKm: settings.ratePerKm,
+          });
+        } catch (error) {
+          console.error(`Error accepting ride ${rideId}:`, error);
+          alert('Failed to accept.');
+        }
+      },
+      'info' // This will now use teal color
+    );
   };
 
-  const handleUpdateStatus = async (status: Ride['status']) => {
+  const handleUpdateStatus = (status: Ride['status']) => {
     if (!user || !activeRide) {
       alert('Cannot update ride status.');
       return;
     }
+
+    // Handle different status updates with appropriate confirmations
+    if (status === 'cancelled') {
+      const title = 'Cancel Ride';
+      let message = '';
+
+      if (activeRide.status === 'accepted') {
+        message = 'Are you sure you want to cancel this ride? The rider is waiting for you.';
+      } else if (activeRide.status === 'in progress') {
+        message = 'Are you sure you want to cancel this ride? The rider is already in your vehicle.';
+      }
+
+      showConfirmation(title, message, async () => {
+        await performStatusUpdate(status);
+      }, 'warning');
+
+    } else if (status === 'completed' && activeRide.status === 'in progress') {
+      showConfirmation(
+        'Complete Ride',
+        'Are you sure you want to mark this ride as completed? This will generate the payment request for the rider.',
+        async () => {
+          await performStatusUpdate(status);
+        },
+        'success'
+      );
+
+    } else if (status === 'in progress') {
+      showConfirmation(
+        'Start Ride',
+        'Are you ready to start this ride? This will indicate to the rider that you have begun the journey.',
+        async () => {
+          await performStatusUpdate(status);
+        },
+        'info' // Using teal color
+      );
+
+    } else {
+      // For other status updates, no confirmation needed
+      performStatusUpdate(status);
+    }
+  };
+
+  // Helper function to perform the actual status update
+  const performStatusUpdate = async (status: Ride['status']) => {
+    if (!user || !activeRide) return;
+
     try {
-      const updates: Partial<Ride> & { [key: string]: any } = { status };
+      const updates: Partial<Ride> & { [key: string]: unknown } = { status };
 
       // Record start time when ride status changes to 'in progress'
       if (status === 'in progress') {
@@ -111,9 +188,9 @@ const DriverApp: React.FC = () => {
       }
 
       if (status === 'completed' || status === 'cancelled') {
-        // Use any type to bypass TypeScript's type checking for Firestore field values
-        (updates as any).driverLocation = deleteField();
-        (updates as any).riderLocation = deleteField();
+        // Use unknown type instead of any
+        (updates as { driverLocation: unknown }).driverLocation = deleteField();
+        (updates as { riderLocation: unknown }).riderLocation = deleteField();
       }
 
       await updateRide(activeRide.id, updates);
@@ -123,28 +200,46 @@ const DriverApp: React.FC = () => {
     }
   };
 
-  const handleConfirmPayment = async () => {
+  const handleConfirmPayment = () => {
     if (!user || !activeRide || activeRide.status !== 'completed') {
       alert('Cannot confirm payment.');
       return;
     }
-    try {
-      await updateRide(activeRide.id, { status: 'paid' });
-    } catch (error) {
-      console.error(`Error confirming payment:`, error);
-      alert('Failed to confirm payment.');
-    }
+
+    // Show confirmation modal for payment confirmation
+    showConfirmation(
+      'Confirm Payment',
+      'Are you sure you want to confirm payment receipt? This will complete the ride transaction.',
+      async () => {
+        try {
+          await updateRide(activeRide.id, { status: 'paid' });
+        } catch (error) {
+          console.error(`Error confirming payment:`, error);
+          alert('Failed to confirm payment.');
+        }
+      },
+      'success'
+    );
   };
 
-  const handleSaveSettings = async () => {
+  const handleSaveSettings = () => {
     if (!user) return;
-    try {
-      await saveDriverSettings(user.uid, settings);
-      alert('Settings saved!');
-    } catch (error) {
-      console.error('Error saving settings:', error);
-      alert('Failed to save.');
-    }
+
+    // Show confirmation modal for saving settings
+    showConfirmation(
+      'Save Settings',
+      'Are you sure you want to save these settings? Your Kaspa address and rate will be used for all future rides.',
+      async () => {
+        try {
+          await saveDriverSettings(user.uid, settings);
+          alert('Settings saved!');
+        } catch (error) {
+          console.error('Error saving settings:', error);
+          alert('Failed to save.');
+        }
+      },
+      'info' // Using teal color
+    );
   };
 
   // Handle loading and error states
@@ -234,6 +329,21 @@ const DriverApp: React.FC = () => {
           <RideHistoryPanel rides={rideHistory} isLoading={isLoadingHistory} />
         )}
       </div>
+
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={showConfirmModal}
+        title={confirmTitle}
+        message={confirmMessage}
+        confirmText="Confirm"
+        cancelText="Cancel"
+        onConfirm={async () => {
+          await confirmAction();
+          setShowConfirmModal(false);
+        }}
+        onCancel={() => setShowConfirmModal(false)}
+        type={confirmType}
+      />
     </div>
   );
 };
