@@ -192,7 +192,12 @@ KaspaTaxi is an experimental, open-source project. Use at your own risk. The aut
 
 ## License
 
-[MIT License](LICENSE.md)
+KaspaTaxi is available under a [dual licensing model](LICENSE.md):
+
+1. **MIT License** - For use with the Kaspa blockchain and KAS native coin only
+2. **Commercial License** - Required for use with other blockchains or KRC-20 tokens
+
+Please refer to the [LICENSE.md](LICENSE.md) file for complete details.
 
 ## Contact
 
