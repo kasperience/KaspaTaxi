@@ -1,0 +1,9 @@
+Fix PM2 ecosystem config for ES modules
+
+This commit addresses the PM2 configuration issue with ES modules:
+
+- Created ecosystem.config.cjs with CommonJS format
+- Updated deployment scripts to use the .cjs file
+- Fixed compatibility with projects using "type": "module"
+
+This change ensures the PM2 configuration works correctly on both development and production environments, regardless of the module system used in the project.

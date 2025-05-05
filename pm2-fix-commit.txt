@@ -1,0 +1,12 @@
+Improve PM2 deployment reliability
+
+This commit enhances the deployment script with better PM2 handling:
+
+- Added cleanup of existing PM2 processes before deployment
+- Implemented fallback to start server directly if ecosystem config fails
+- Added error handling to prevent deployment failures
+- Improved logging for better troubleshooting
+
+These changes make the deployment process more robust and reliable,
+especially when dealing with potential module system conflicts between
+ES modules and CommonJS in the PM2 configuration.

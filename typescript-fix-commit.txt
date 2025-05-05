@@ -1,0 +1,11 @@
+Fix TypeScript errors in server code
+
+This commit addresses TypeScript type issues in the server code:
+
+- Added proper type annotations to Express request and response objects
+- Created interfaces for filter and orderBy parameters
+- Fixed query type issues in Firestore operations
+- Added proper typing for document snapshots
+- Extended Request interface to include uid property
+
+These changes ensure the server code compiles correctly with TypeScript's type checking, improving code quality and preventing potential runtime errors.

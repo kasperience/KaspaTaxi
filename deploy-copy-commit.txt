@@ -1,0 +1,10 @@
+Add file copy step to deployment script
+
+This commit adds an important step to the Ubuntu deployment script:
+
+- Added command to copy built files to the web server directory
+- Uses sudo to ensure proper permissions
+- Copies from dist/ to /var/www/html3/
+
+This ensures the built client files are properly deployed to the web server's
+public directory, making them accessible through the configured web server.
