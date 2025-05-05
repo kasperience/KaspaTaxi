@@ -1,10 +1,20 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import { db, auth } from '../firebase-admin';
+import { Query, DocumentData } from 'firebase-admin/firestore';
 
 const router = express.Router();
 
+// Extend Request type to include uid
+declare global {
+  namespace Express {
+    interface Request {
+      uid?: string;
+    }
+  }
+}
+
 // Middleware to verify Firebase ID token
-const verifyToken = (req, res, next) => {
+const verifyToken = (req: Request, res: Response, next: NextFunction) => {
   (async () => {
   try {
       const authHeader = req.headers.authorization;
@@ -28,7 +38,7 @@ const verifyToken = (req, res, next) => {
 };
 
 // Get a document
-router.get('/:collection/:id', verifyToken, (req, res) => {
+router.get('/:collection/:id', verifyToken, (req: Request, res: Response) => {
   (async () => {
   try {
       const { collection, id } = req.params;
@@ -53,34 +63,48 @@ router.get('/:collection/:id', verifyToken, (req, res) => {
 });
 
 // Query documents
-router.post('/:collection/query', verifyToken, (req, res) => {
+router.post('/:collection/query', verifyToken, (req: Request, res: Response) => {
   (async () => {
   try {
       const { collection } = req.params;
       const { filters = [], orderBy, limit } = req.body;
 
-      let query = db.collection(collection);
+      // Define the filter type
+      interface Filter {
+        field: string;
+        operator: FirebaseFirestore.WhereFilterOp;
+        value: any;
+      }
+
+      // Define the orderBy type
+      interface OrderBy {
+        field: string;
+        direction: FirebaseFirestore.OrderByDirection;
+      }
+
+      let query: FirebaseFirestore.Query<FirebaseFirestore.DocumentData> = db.collection(collection);
 
       // Apply filters
-      filters.forEach((filter) => {
+      filters.forEach((filter: Filter) => {
         query = query.where(filter.field, filter.operator, filter.value);
       });
 
       // Apply orderBy
       if (orderBy) {
-        query = query.orderBy(orderBy.field, orderBy.direction);
+        const orderByTyped = orderBy as OrderBy;
+        query = query.orderBy(orderByTyped.field, orderByTyped.direction);
       }
 
       // Apply limit
       if (limit) {
-        query = query.limit(limit);
+        query = query.limit(Number(limit));
       }
 
       // Execute the query
       const snapshot = await query.get();
 
       // Return the results
-      const results = snapshot.docs.map(doc => ({
+      const results = snapshot.docs.map((doc: FirebaseFirestore.QueryDocumentSnapshot<FirebaseFirestore.DocumentData>) => ({
         id: doc.id,
         ...doc.data(),
       }));
@@ -94,7 +118,7 @@ router.post('/:collection/query', verifyToken, (req, res) => {
 });
 
 // Create a document
-router.post('/:collection', verifyToken, (req, res) => {
+router.post('/:collection', verifyToken, (req: Request, res: Response) => {
   (async () => {
   try {
       const { collection } = req.params;
@@ -121,7 +145,7 @@ router.post('/:collection', verifyToken, (req, res) => {
 });
 
 // Update a document
-router.put('/:collection/:id', verifyToken, (req, res) => {
+router.put('/:collection/:id', verifyToken, (req: Request, res: Response) => {
   (async () => {
   try {
       const { collection, id } = req.params;
@@ -145,7 +169,7 @@ router.put('/:collection/:id', verifyToken, (req, res) => {
 });
 
 // Delete a document
-router.delete('/:collection/:id', verifyToken, (req, res) => {
+router.delete('/:collection/:id', verifyToken, (req: Request, res: Response) => {
   (async () => {
   try {
       const { collection, id } = req.params;
@@ -159,5 +183,6 @@ router.delete('/:collection/:id', verifyToken, (req, res) => {
       return res.status(500).json({ error: 'Failed to delete document' });
     }
   })();
+});
 
 export default router;
