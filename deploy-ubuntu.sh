@@ -25,6 +25,11 @@ echo "Copying built files to web server directory..."
 # Make sure this runs with appropriate permissions
 sudo cp -r dist/* /var/www/html3/
 
+echo "Fixing image paths in Markdown files..."
+sudo sed -i 's|src="src/assets/taxi-icon.png"|src="assets/taxi-icon.png"|g' /var/www/html3/README.md
+sudo sed -i 's|src="src/assets/qr-code.png"|src="assets/qr-code.png"|g' /var/www/html3/README.md
+sudo sed -i 's|src="src/assets/|src="assets/|g' /var/www/html3/*.md
+
 echo "Starting or restarting the application with PM2..."
 # Try the ecosystem config first
 pm2 start ecosystem.config.cjs || {
