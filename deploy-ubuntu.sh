@@ -14,6 +14,10 @@ cd server && npm install && cd ..
 echo "Building both client and server..."
 npm run build:all
 
+echo "Copying built files to web server directory..."
+# Make sure this runs with appropriate permissions
+sudo cp -r dist/* /var/www/html3/
+
 echo "Starting or restarting the application with PM2..."
 pm2 start ecosystem.config.cjs
 
