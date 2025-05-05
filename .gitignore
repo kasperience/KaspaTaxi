@@ -23,5 +23,11 @@ dist-ssr
 *.sln
 *.sw?
 .env
+server/.env
 kaspataxi-adc325c9b727.json
 kaspataxi-firebase-adminsdk-fbsvc-ebbbb8287a.json
+.continue/mcpServers/new-mcpServer.yaml
+.continue/config.json
+.continue/config.alternative.json
+
+src/utils/blockchainValidation.ts

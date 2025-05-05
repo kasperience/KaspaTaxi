@@ -10,6 +10,9 @@
     "build": "vite build",
     "build:server": "cd server && npm run build",
     "build:all": "npm run build && npm run build:server",
+    "start": "vite preview --port 4324",
+    "start:server": "cd server && npm run start",
+    "start:all": "concurrently \"npm run start\" \"npm run start:server\"",
     "lint": "eslint .",
     "preview": "vite preview"
   },
