@@ -18,6 +18,30 @@
 
 KaspaTaxi is an open-source project demonstrating a decentralized, transparent, and community-driven approach to ride-booking. Our vision is to empower independent taxi drivers and provide riders with a secure and direct way to connect and transact using the speed and efficiency of the Kaspa blockchain, ultimately aiming to reduce costs by eliminating intermediaries.
 
+## Deployment Options
+
+KaspaTaxi offers two deployment approaches to suit different needs:
+
+### Option 1: Client-Only Deployment (Simple)
+
+- **Branch**: `main`
+- **Description**: Simpler setup with all functionality in the client
+- **Best for**: Quick demos, learning, and development
+- **Security note**: API keys are stored in client-side code (not recommended for production)
+
+### Option 2: Secure Server Deployment (Recommended for Production)
+
+- **Branch**: `server`
+- **Description**: Secure architecture with server-side API handling
+- **Best for**: Production deployments and public-facing applications
+- **Security benefits**: API keys are protected on the server side
+
+### Choosing the Right Approach
+
+- **For learning and development**: The client-only approach (main branch) is simpler to set up and understand
+- **For production use**: The secure server approach (server branch) follows best practices for security
+- **For contributing**: Please follow the secure approach for any production-ready contributions
+
 ## 🚕 Try the Demo (MVP)
 
 Experience the current KaspaTaxi MVP in action: [kaspataxi.KASperience.xyz](https://kaspataxi.KASperience.xyz)
@@ -74,62 +98,125 @@ Experience the current KaspaTaxi MVP in action: [kaspataxi.KASperience.xyz](http
 
 ## Getting Started
 
-1.  **Prerequisites:**
-    *   Node.js (v18 or higher)
-    *   NPM or Yarn
-    *   Firebase Account (for development/deployment)
-    *   Kaspa Wallet (for testing payments)
-    *   Firebase Studio or IDE
-2.  **Clone the Repository:**
-    ```bash
-    git clone https://github.com/YOUR-USERNAME/KaspaTaxi.git
-    cd KaspaTaxi/kaspaTaxi
-    # Note: Ensure you are in the correct sub-directory
-    ```
-3.  **Install Dependencies:**
-    ```bash
-    npm install
-    ```
-4.  **Firebase Setup:**
-    *   Create a Firebase project.
-    *   Enable Firestore and Authentication (Google provider).
-    *   Get your Firebase project configuration (apiKey, authDomain, etc.).
-    *   Create a `.env` file in the `kaspaTaxi` directory (copy `.env.example` if provided) and add your Firebase config variables there.
-    *   Example `.env` content:
-        ```
-        VITE_FIREBASE_API_KEY=YOUR_API_KEY
-        VITE_FIREBASE_AUTH_DOMAIN=YOUR_AUTH_DOMAIN
-        VITE_FIREBASE_PROJECT_ID=YOUR_PROJECT_ID
-        VITE_FIREBASE_STORAGE_BUCKET=YOUR_STORAGE_BUCKET
-        VITE_FIREBASE_MESSAGING_SENDER_ID=YOUR_SENDER_ID
-        VITE_FIREBASE_APP_ID=YOUR_APP_ID
-        ```
-    *   **Deploy Security Rules:** After configuring your rules in the `firestore.rules` file (initially set to deny all access), deploy them using the Firebase CLI. Make sure you have the CLI installed (`npm install -g firebase-tools`), are logged in (`firebase login`), and have initialized Firestore for your project (`firebase init firestore` if needed, select your project and point to `kaspaTaxi/firestore.rules`). Then run:
-        ```bash
-        # Make sure you are in the project's root directory (where firebase.json is, after running init)
-        firebase deploy --only firestore:rules
-        ```
-5.  **Server Setup (for API Key Security):**
-    * Navigate to the server directory: `cd server`
-    * Install server dependencies: `npm install`
-    * Create a `.env` file in the server directory with your API keys:
-      ```
-      PORT=3001
-      MAPTILER_API_KEY=YOUR_MAPTILER_API_KEY
-      ```
-    * Return to the main directory: `cd ..`
+### Prerequisites
 
-6.  **Run the Development Server:**
-    ```bash
-    # Run both the client and server
-    npm run dev:all
+- Node.js (v18 or higher)
+- NPM or Yarn
+- Firebase Account (for development/deployment)
+- Kaspa Wallet (for testing payments)
+- Firebase Studio or IDE
 
-    # Or run just the client (if you don't need the server features)
-    npm run dev
-    ```
-7.  **IDX Configuration (If applicable):**
-    *   Ensure necessary environment variables (like Firebase keys if not using `.env` for IDX) are configured in `.idx/dev.nix`.
-    *   Rebuild the environment if needed within IDX.
+### Option 1: Client-Only Approach (main branch)
+
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/YOUR-USERNAME/KaspaTaxi.git
+   cd KaspaTaxi
+   # Clone from main branch (default)
+   ```
+
+2. **Install Dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Firebase Setup:**
+   - Create a Firebase project
+   - Enable Firestore and Authentication (Google provider)
+   - Set up Firestore security rules (see Security Considerations section)
+
+4. **Environment Configuration:**
+   - Create a `.env` file in the project root with the following variables:
+   ```
+   VITE_FIREBASE_API_KEY=your_firebase_api_key
+   VITE_FIREBASE_AUTH_DOMAIN=your_firebase_auth_domain
+   VITE_FIREBASE_PROJECT_ID=your_firebase_project_id
+   VITE_FIREBASE_STORAGE_BUCKET=your_firebase_storage_bucket
+   VITE_FIREBASE_MESSAGING_SENDER_ID=your_firebase_messaging_sender_id
+   VITE_FIREBASE_APP_ID=your_firebase_app_id
+   VITE_MAPTILER_API_KEY=your_maptiler_api_key
+   ```
+
+5. **Start the Development Server:**
+   ```bash
+   npm run dev
+   ```
+
+### Option 2: Secure Server Approach (server branch - Recommended for Production)
+
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/YOUR-USERNAME/KaspaTaxi.git
+   cd KaspaTaxi
+
+   # Switch to the server branch
+   git checkout server
+   ```
+
+2. **Install Client Dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Set up Client Environment Variables:**
+   - Create a `.env` file in the project root with the following variables:
+   ```
+   VITE_FIREBASE_API_KEY=your_firebase_api_key
+   VITE_FIREBASE_AUTH_DOMAIN=your_firebase_auth_domain
+   VITE_FIREBASE_PROJECT_ID=your_firebase_project_id
+   VITE_FIREBASE_STORAGE_BUCKET=your_firebase_storage_bucket
+   VITE_FIREBASE_MESSAGING_SENDER_ID=your_firebase_messaging_sender_id
+   VITE_FIREBASE_APP_ID=your_firebase_app_id
+   ```
+
+4. **Set up Server:**
+   ```bash
+   # Navigate to the server directory
+   cd server
+
+   # Install server dependencies
+   npm install
+
+   # Create .env file with API keys
+   # Example content:
+   PORT=3001
+   MAPTILER_API_KEY=your_maptiler_api_key
+
+   # Return to the main directory
+   cd ..
+   ```
+
+5. **Start Both Client and Server:**
+   ```bash
+   # Run both client and server
+   npm run dev:all
+
+   # Or run just the client (if you don't need the server features)
+   npm run dev
+   ```
+
+### Firebase Security Rules Deployment
+
+After configuring your rules in the `firestore.rules` file:
+
+```bash
+# Install Firebase CLI if you haven't already
+npm install -g firebase-tools
+
+# Login to Firebase
+firebase login
+
+# Initialize Firestore for your project (if needed)
+firebase init firestore
+
+# Deploy the rules
+firebase deploy --only firestore:rules
+```
+
+### IDX Configuration (If applicable)
+
+- Ensure necessary environment variables are configured in `.idx/dev.nix`
+- Rebuild the environment if needed within IDX
 
 ## Customization
 

@@ -68,6 +68,8 @@ const Documentation = () => {
               <div className="flex flex-wrap gap-3">
                 <a href="#overview" onClick={handleAnchorClick} className="text-[#1ABC9C] hover:text-[#16a085] font-medium">Overview</a>
                 <span className="text-gray-400">•</span>
+                <a href="#deployment-options" onClick={handleAnchorClick} className="text-[#1ABC9C] hover:text-[#16a085] font-medium">Deployment Options</a>
+                <span className="text-gray-400">•</span>
                 <a href="#key-features-mvp" onClick={handleAnchorClick} className="text-[#1ABC9C] hover:text-[#16a085] font-medium">Key Features</a>
                 <span className="text-gray-400">•</span>
                 <a href="#getting-started" onClick={handleAnchorClick} className="text-[#1ABC9C] hover:text-[#16a085] font-medium">Getting Started</a>
@@ -90,6 +92,39 @@ const Documentation = () => {
           <p className="mb-6">
             Built on the Kaspa blockchain, KaspaTaxi leverages the speed and efficiency of Kaspa's BlockDAG architecture to provide near-instant payment confirmations, making it practical for real-world transportation services.
           </p>
+
+          <h3 className="text-xl font-bold mb-3 text-gray-900" id="deployment-options">Deployment Options</h3>
+
+          <p className="mb-4">KaspaTaxi offers two deployment approaches to suit different needs:</p>
+
+          <div className="mb-6">
+            <div className="bg-gray-50 p-4 rounded-lg mb-4">
+              <h4 className="font-bold text-lg mb-2">Option 1: Client-Only Deployment (Simple)</h4>
+              <ul className="list-disc pl-6">
+                <li><strong>Branch:</strong> <code>main</code></li>
+                <li><strong>Description:</strong> Simpler setup with all functionality in the client</li>
+                <li><strong>Best for:</strong> Quick demos, learning, and development</li>
+                <li><strong>Security note:</strong> API keys are stored in client-side code (not recommended for production)</li>
+              </ul>
+            </div>
+
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h4 className="font-bold text-lg mb-2">Option 2: Secure Server Deployment (Recommended for Production)</h4>
+              <ul className="list-disc pl-6">
+                <li><strong>Branch:</strong> <code>server</code></li>
+                <li><strong>Description:</strong> Secure architecture with server-side API handling</li>
+                <li><strong>Best for:</strong> Production deployments and public-facing applications</li>
+                <li><strong>Security benefits:</strong> API keys are protected on the server side</li>
+              </ul>
+            </div>
+          </div>
+
+          <h4 className="font-bold mb-2">Choosing the Right Approach</h4>
+          <ul className="list-disc pl-6 mb-6">
+            <li><strong>For learning and development:</strong> The client-only approach (main branch) is simpler to set up and understand</li>
+            <li><strong>For production use:</strong> The secure server approach (server branch) follows best practices for security</li>
+            <li><strong>For contributing:</strong> Please follow the secure approach for any production-ready contributions</li>
+          </ul>
 
           <h2 className="text-2xl font-bold mb-4 text-gray-900" id="key-features-mvp">Key Features (MVP - Currently Functional)</h2>
 
@@ -149,49 +184,142 @@ const Documentation = () => {
           <h3 className="text-xl font-bold mb-3 text-gray-900">Prerequisites</h3>
 
           <ul className="list-disc pl-6 mb-6">
-            <li>Node.js (v14 or higher)</li>
+            <li>Node.js (v18 or higher)</li>
             <li>npm or yarn</li>
-            <li>A Kaspa wallet (for payments)</li>
+            <li>Firebase Account (for development/deployment)</li>
+            <li>A Kaspa wallet (for testing payments)</li>
+            <li>Firebase Studio or IDE</li>
           </ul>
 
           <h3 className="text-xl font-bold mb-3 text-gray-900">Installation</h3>
 
-          <ol className="list-decimal pl-6 mb-6">
-            <li className="mb-4">
-              <p className="mb-2"><strong>Clone the Repository:</strong></p>
-              <CopyableCodeBlock>
+          <div className="mb-8">
+            <h4 className="font-bold text-lg mb-3 bg-gray-100 p-2 rounded">Client-Only Approach (main branch)</h4>
+
+            <ol className="list-decimal pl-6 mb-6">
+              <li className="mb-4">
+                <p className="mb-2"><strong>Clone the Repository:</strong></p>
+                <CopyableCodeBlock>
 {`git clone https://github.com/YOUR-USERNAME/KaspaTaxi.git
-cd KaspaTaxi/kaspaTaxi
-# Note: Ensure you are in the correct sub-directory`}
-              </CopyableCodeBlock>
-            </li>
-            <li className="mb-4">
-              <p className="mb-2"><strong>Install Dependencies:</strong></p>
-              <CopyableCodeBlock>
-{`npm install
-# or
-yarn install`}
-              </CopyableCodeBlock>
-            </li>
-            <li className="mb-4">
-              <p className="mb-2"><strong>Set up Environment Variables:</strong></p>
-              <p className="mb-2">Create a <code>.env</code> file in the project root with the following variables:</p>
-              <CopyableCodeBlock>
+cd KaspaTaxi
+# Clone from main branch (default)`}
+                </CopyableCodeBlock>
+              </li>
+              <li className="mb-4">
+                <p className="mb-2"><strong>Install Dependencies:</strong></p>
+                <CopyableCodeBlock>
+{`npm install`}
+                </CopyableCodeBlock>
+              </li>
+              <li className="mb-4">
+                <p className="mb-2"><strong>Set up Environment Variables:</strong></p>
+                <p className="mb-2">Create a <code>.env</code> file in the project root with the following variables:</p>
+                <CopyableCodeBlock>
 {`VITE_FIREBASE_API_KEY=your_firebase_api_key
 VITE_FIREBASE_AUTH_DOMAIN=your_firebase_auth_domain
 VITE_FIREBASE_PROJECT_ID=your_firebase_project_id
 VITE_FIREBASE_STORAGE_BUCKET=your_firebase_storage_bucket
 VITE_FIREBASE_MESSAGING_SENDER_ID=your_firebase_messaging_sender_id
 VITE_FIREBASE_APP_ID=your_firebase_app_id
-VITE_MAPBOX_ACCESS_TOKEN=your_mapbox_access_token`}
-              </CopyableCodeBlock>
+VITE_MAPTILER_API_KEY=your_maptiler_api_key`}
+                </CopyableCodeBlock>
+              </li>
+              <li className="mb-4">
+                <p className="mb-2"><strong>Start the Development Server:</strong></p>
+                <CopyableCodeBlock>
+{`npm run dev`}
+                </CopyableCodeBlock>
+              </li>
+            </ol>
+          </div>
+
+          <div className="mb-8">
+            <h4 className="font-bold text-lg mb-3 bg-gray-100 p-2 rounded">Secure Server Approach (server branch - Recommended for Production)</h4>
+
+            <ol className="list-decimal pl-6 mb-6">
+              <li className="mb-4">
+                <p className="mb-2"><strong>Clone the Repository:</strong></p>
+                <CopyableCodeBlock>
+{`git clone https://github.com/YOUR-USERNAME/KaspaTaxi.git
+cd KaspaTaxi
+
+# Switch to the server branch
+git checkout server`}
+                </CopyableCodeBlock>
+              </li>
+              <li className="mb-4">
+                <p className="mb-2"><strong>Install Client Dependencies:</strong></p>
+                <CopyableCodeBlock>
+{`npm install`}
+                </CopyableCodeBlock>
+              </li>
+              <li className="mb-4">
+                <p className="mb-2"><strong>Set up Client Environment Variables:</strong></p>
+                <p className="mb-2">Create a <code>.env</code> file in the project root with the following variables:</p>
+                <CopyableCodeBlock>
+{`VITE_FIREBASE_API_KEY=your_firebase_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_firebase_auth_domain
+VITE_FIREBASE_PROJECT_ID=your_firebase_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_firebase_storage_bucket
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_firebase_messaging_sender_id
+VITE_FIREBASE_APP_ID=your_firebase_app_id`}
+                </CopyableCodeBlock>
+              </li>
+              <li className="mb-4">
+                <p className="mb-2"><strong>Set up Server:</strong></p>
+                <CopyableCodeBlock>
+{`# Navigate to the server directory
+cd server
+
+# Install server dependencies
+npm install
+
+# Create .env file with API keys
+# Example content:
+PORT=3001
+MAPTILER_API_KEY=your_maptiler_api_key
+
+# Return to the main directory
+cd ..`}
+                </CopyableCodeBlock>
+              </li>
+              <li className="mb-4">
+                <p className="mb-2"><strong>Start Both Client and Server:</strong></p>
+                <CopyableCodeBlock>
+{`# Run both client and server
+npm run dev:all
+
+# Or run just the client (if you don't need the server features)
+npm run dev`}
+                </CopyableCodeBlock>
+              </li>
+            </ol>
+          </div>
+
+          <h3 className="text-xl font-bold mb-3 text-gray-900">Firebase Setup</h3>
+
+          <ol className="list-decimal pl-6 mb-6">
+            <li className="mb-4">
+              <p className="mb-2"><strong>Create a Firebase project</strong></p>
             </li>
             <li className="mb-4">
-              <p className="mb-2"><strong>Start the Development Server:</strong></p>
+              <p className="mb-2"><strong>Enable Firestore and Authentication (Google provider)</strong></p>
+            </li>
+            <li className="mb-4">
+              <p className="mb-2"><strong>Deploy Security Rules:</strong></p>
+              <p className="mb-2">After configuring your rules in the <code>firestore.rules</code> file, deploy them using the Firebase CLI:</p>
               <CopyableCodeBlock>
-{`npm run dev
-# or
-yarn dev`}
+{`# Install Firebase CLI if you haven't already
+npm install -g firebase-tools
+
+# Login to Firebase
+firebase login
+
+# Initialize Firestore for your project (if needed)
+firebase init firestore
+
+# Deploy the rules
+firebase deploy --only firestore:rules`}
               </CopyableCodeBlock>
             </li>
           </ol>
@@ -271,6 +399,8 @@ yarn dev`}
             <h3 className="text-lg font-semibold mb-3 text-gray-700">Quick Navigation:</h3>
             <div className="flex flex-wrap gap-3">
               <a href="#overview" onClick={handleAnchorClick} className="text-[#1ABC9C] hover:text-[#16a085] font-medium">Overview</a>
+              <span className="text-gray-400">•</span>
+              <a href="#deployment-options" onClick={handleAnchorClick} className="text-[#1ABC9C] hover:text-[#16a085] font-medium">Deployment Options</a>
               <span className="text-gray-400">•</span>
               <a href="#key-features-mvp" onClick={handleAnchorClick} className="text-[#1ABC9C] hover:text-[#16a085] font-medium">Key Features</a>
               <span className="text-gray-400">•</span>
