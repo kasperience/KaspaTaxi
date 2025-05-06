@@ -8,10 +8,11 @@ import PrivacyPolicy from './components/PrivacyPolicy';
 import CookiePolicy from './components/CookiePolicy';
 import FooterDonation from './components/FooterDonation';
 import Contributing from './components/Contributing';
-import Readme from './components/Readme';
+import Documentation from './components/Documentation';
 import License from './components/License';
 import EmailQuoteButton from './components/EmailQuoteButton';
 import PrivacyBanner from './components/PrivacyBanner';
+import Features from './components/Features';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ const LandingPage = () => {
               <span className="text-2xl text-white font-bold">Kaspa<span className="font-normal text-[#F1C40F] bg-black px-1 rounded">Taxi</span></span>
             </div>
             <div className="hidden md:flex space-x-6">
-              <a href="#features" className="text-white hover:text-[#F1C40F] transition-colors">Features</a>
+              <Link to="/features" className="text-white hover:text-[#F1C40F] transition-colors">Features</Link>
               <a href="#how-it-works" className="text-white hover:text-[#F1C40F] transition-colors">How It Works</a>
 
             </div>
@@ -90,6 +91,11 @@ const LandingPage = () => {
                 <p className="text-gray-600">{feature.description}</p>
               </div>
             ))}
+          </div>
+          <div className="mt-10 text-center">
+            <Link to="/features" className="inline-block bg-[#1ABC9C] hover:bg-[#16a085] text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+              View All Features
+            </Link>
           </div>
         </div>
       </div>
@@ -156,6 +162,11 @@ const LandingPage = () => {
               </div>
             ))}
           </div>
+          <div className="mt-10 text-center">
+            <Link to="/features" className="inline-block bg-[#1ABC9C] hover:bg-[#16a085] text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+              View All Features
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -165,9 +176,14 @@ const LandingPage = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-8">
             Ready to Transform Your Ride Experience?
           </h2>
-          <Link to="/app" className="bg-[#F1C40F] text-gray-900 px-8 py-3 rounded-lg font-semibold hover:bg-[#F39C12] transition-colors">
-            Book a Ride Now
-          </Link>
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <Link to="/app" className="bg-[#F1C40F] text-gray-900 px-8 py-3 rounded-lg font-semibold hover:bg-[#F39C12] transition-colors">
+              Book a Ride Now
+            </Link>
+            <Link to="/readme#documentation-top" className="bg-white text-[#1ABC9C] px-8 py-3 rounded-lg font-semibold hover:bg-[#F1C40F] hover:text-gray-900 transition-colors">
+              Documentation
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -205,8 +221,9 @@ const LandingPage = () => {
             <div>
               <h3 className="font-semibold mb-4">Resources</h3>
               <ul className="space-y-2">
+                <li><Link to="/features" className="text-gray-400 hover:text-white transition-colors">Features</Link></li>
                 <li><Link to="/contributing" className="text-gray-400 hover:text-white transition-colors">Contribution Guidelines</Link></li>
-                <li><Link to="/readme" className="text-gray-400 hover:text-white transition-colors">Documentation</Link></li>
+                <li><Link to="/readme#documentation-top" className="text-gray-400 hover:text-white transition-colors">Documentation</Link></li>
                 {/* Removed the Security link */}
               </ul>
             </div>
@@ -221,15 +238,15 @@ const LandingPage = () => {
                 </a>
               </div>
               <p className="text-gray-400 text-sm">
-                Contact: <a href="mailto:dev@KASperience.xyz" className="hover:text-white">dev@KASperience.xyz</a>
+                Contact: <a href="mailto:dev@KASperience.xyz" className="text-[#1ABC9C] hover:text-white">dev@KASperience.xyz</a>
               </p>
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
             <p>© 2025 KASperience. All rights reserved.</p>
             <p className="text-xs mt-2">
-              This project is licensed under the <a href="LICENSE.md" className="hover:text-white">MIT License</a>.
-              We welcome <a href="CONTRIBUTING.md" className="hover:text-white">contributions</a> of all kinds.
+              This project is licensed under the <a href="LICENSE.md" className="text-[#1ABC9C] hover:text-white">MIT License</a>.
+              We welcome <a href="CONTRIBUTING.md" className="text-[#1ABC9C] hover:text-white">contributions</a> of all kinds.
             </p>
           </div>
         </div>
@@ -257,8 +274,9 @@ function App() {
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/cookies" element={<CookiePolicy />} />
         <Route path="/contributing" element={<Contributing />} />
-        <Route path="/readme" element={<Readme />} />
+        <Route path="/readme" element={<Documentation />} />
         <Route path="/license" element={<License />} />
+        <Route path="/features" element={<Features />} />
       </Routes>
       <PrivacyBanner onAccept={handlePrivacyAccept} />
     </Router>

@@ -16,19 +16,19 @@ const PrivacyPolicy = () => {
           </Link>
         </div>
       </header>
-      
+
       <main className="max-w-4xl mx-auto p-6 bg-white my-8 rounded-lg shadow">
         <h1 className="text-3xl font-bold mb-6">Privacy Policy</h1>
-        
+
         <section className="mb-6">
           <h2 className="text-xl font-semibold mb-3">Introduction</h2>
           <p className="mb-4">This Privacy Policy describes how Kaspa Taxi ("we," "us," or "our") collects, uses, and protects the information of users ("you" or "your") who use the Kaspa Taxi application (the "App"). We are committed to protecting your privacy and ensuring the security of your personal information.</p>
         </section>
-        
+
         <section className="mb-6">
           <h2 className="text-xl font-semibold mb-3">Information We Collect</h2>
           <p className="mb-4">As an open-source project, Kaspa Taxi values transparency and user control. We strive to minimize data collection. However, certain information may be collected to provide core functionality and improve user experience.</p>
-          
+
           <h3 className="text-lg font-medium mt-4 mb-2">Information You Provide Directly</h3>
           <ul className="list-disc pl-6 mb-3">
             <li className="mb-1">Account Information: While our current setup does not require user accounts, if accounts are implemented in the future, we may collect information like usernames and email addresses.</li>
@@ -36,7 +36,7 @@ const PrivacyPolicy = () => {
             <li className="mb-1">Payment information: When implemented users will provide a way to pay for the service.</li>
             <li className="mb-1">Communications: Any communications you have with us, such as through feedback forms or support requests.</li>
           </ul>
-          
+
           <h3 className="text-lg font-medium mt-4 mb-2">Information Collected Automatically</h3>
           <ul className="list-disc pl-6 mb-3">
             <li className="mb-1">Usage Data: Information about how you interact with the App, such as the features you use and the time and duration of your interactions.</li>
@@ -44,7 +44,7 @@ const PrivacyPolicy = () => {
             <li className="mb-1">Technical Information: Error logs and other technical data to aid in debugging and improving the application.</li>
           </ul>
         </section>
-        
+
         {/* Additional sections would follow */}
         <section className="mb-6">
           <h2 className="text-xl font-semibold mb-3">How We Use Your Information</h2>
@@ -57,13 +57,13 @@ const PrivacyPolicy = () => {
             <li className="mb-1">Communications: To communicate with you regarding updates, new features, and important notices.</li>
           </ul>
         </section>
-        
+
         <section className="mb-6">
           <h2 className="text-xl font-semibold mb-3">Contact Us</h2>
-          <p className="mb-4">If you have any questions or concerns about this Privacy Policy, please contact us at: dev@KASperience.xyz</p>
+          <p className="mb-4">If you have any questions or concerns about this Privacy Policy, please contact us at: <a href="mailto:dev@KASperience.xyz" className="text-[#1ABC9C] hover:text-[#16a085] font-medium">dev@KASperience.xyz</a></p>
         </section>
       </main>
-      
+
       <footer className="bg-gray-900 text-white py-6">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <p>© 2025 KASperience. All rights reserved.</p>
