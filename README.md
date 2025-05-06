@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./assets/taxi-icon.png" alt="KaspaTaxi Logo" width="100" height="100">
+  <img src="src/assets/taxi-icon.png" alt="KaspaTaxi Logo" width="100" height="100">
   <h1>KaspaTaxi</h1>
   <p><strong>Decentralized Ride-Booking leveraging Kaspa</strong></p>
   <p>
@@ -22,10 +22,6 @@ KaspaTaxi is an open-source project demonstrating a decentralized, transparent, 
 
 Experience the current KaspaTaxi MVP in action: [kaspataxi.KASperience.xyz](https://kaspataxi.KASperience.xyz)
 
-<div align="center">
-  <img src="./assets/clip.gif" alt="KaspaTaxi in action" width="600"/>
-</div>
-
 *Note: The MVP focuses on demonstrating the core user interface, ride flow, and direct Kaspa payment initiation. Deeper blockchain integration and backend automation are planned for future phases.*
 
 ## Why Kaspa? (Our Vision)
@@ -34,6 +30,10 @@ Experience the current KaspaTaxi MVP in action: [kaspataxi.KASperience.xyz](http
 *   **Direct & Efficient Payments:** By facilitating direct Kaspa payments between rider and driver, we aim to eliminate platform commissions. Kaspa's potential for fast transaction confirmations and low fees makes it ideal for near real-time settlement.
 *   **Community-Driven Development:** We believe the platform should be built by and for its users. Open-source development encourages contribution and customization.
 *   **Driver Empowerment:** Provide drivers with tools to manage their service independently, connect directly with riders, and potentially build their reputation on-chain in the future.
+
+<div align="center">
+  <img src="src/assets/clip.gif" alt="KaspaTaxi in action" width="600"/>
+</div>
 
 ## Key Features (MVP - Currently Functional)
 
@@ -213,7 +213,7 @@ Support KaspaTaxi's development!
 **Scan the QR Code or Copy the Address:**
 
 <div align="center">
-  <img src="./assets/qr-code.png" alt="Kaspa Donation QR Code" width="200"/>
+  <img src="src/assets/qr-code.png" alt="Kaspa Donation QR Code" width="200"/>
 </div>
 
 ```
