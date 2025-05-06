@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom'; // Import useLocation
+import { useLocation, Link } from 'react-router-dom'; // Import useLocation and Link
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw'; // Allows rendering raw HTML from markdown
 import CopyableCodeBlock from './CopyableCodeBlock';
@@ -104,6 +104,74 @@ const Readme = () => {
                   <CopyableCodeBlock>
                     {String(children).replace(/\n$/, '')}
                   </CopyableCodeBlock>
+                );
+              },
+              a: ({href, children, ...props}: any) => {
+                // Special case for Features link
+                if (href && (
+                  href === '#key-features-mvp' ||
+                  href === '#key-features' ||
+                  href.toLowerCase().includes('feature') ||
+                  String(children).toLowerCase().includes('feature')
+                )) {
+                  return (
+                    <Link to="/features" className="text-[#1ABC9C] hover:text-[#16a085] font-medium" {...props}>
+                      {children}
+                    </Link>
+                  );
+                }
+
+                // Handle internal links (those starting with /)
+                if (href && href.startsWith('/')) {
+                  return (
+                    <Link to={href} className="text-[#1ABC9C] hover:text-[#16a085] font-medium" {...props}>
+                      {children}
+                    </Link>
+                  );
+                }
+
+                // Handle anchor links (those starting with #)
+                if (href && href.startsWith('#')) {
+                  return (
+                    <a
+                      href={href}
+                      className="text-[#1ABC9C] hover:text-[#16a085] font-medium"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const id = href.substring(1); // Remove the '#'
+                        const element = document.getElementById(id);
+                        if (element) {
+                          element.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                          });
+
+                          // Add a visual highlight effect
+                          const originalBackground = element.style.backgroundColor;
+                          element.style.backgroundColor = 'rgba(241, 196, 15, 0.2)';
+                          setTimeout(() => {
+                            element.style.backgroundColor = originalBackground;
+                          }, 2000);
+                        }
+                      }}
+                      {...props}
+                    >
+                      {children}
+                    </a>
+                  );
+                }
+
+                // Handle external links
+                return (
+                  <a
+                    href={href}
+                    className="text-[#1ABC9C] hover:text-[#16a085] font-medium"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    {...props}
+                  >
+                    {children}
+                  </a>
                 );
               }
             }}
