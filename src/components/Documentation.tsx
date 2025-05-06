@@ -139,7 +139,7 @@ const Documentation = () => {
           </ul>
 
           <div className="mb-8 text-center">
-            <Link to="/features" className="inline-block bg-[#1ABC9C] hover:bg-[#16a085] text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+            <Link to="/features#features-top" className="inline-block bg-[#1ABC9C] hover:bg-[#16a085] text-white px-6 py-3 rounded-lg font-semibold transition-colors">
               View All Features
             </Link>
           </div>

@@ -65,7 +65,7 @@ const EmailQuoteButton: React.FC<EmailQuoteButtonProps> = ({ className }) => {
                 <li>Refresh the page and try again</li>
               </ol>
               <p className="text-xs mt-2 text-amber-700 font-medium">
-                Alternatively, email us directly at: <a href="mailto:sales@kasperience.xyz" className="text-[#1ABC9C] hover:text-[#16a085] font-medium">sale@kasperience.xyz</a>
+                Alternatively, email us directly at: <a href="mailto:sales@kasperience.xyz" className="text-[#1ABC9C] hover:text-[#16a085] font-medium">sales@kasperience.xyz</a>
               </p>
             </div>
           </div>
