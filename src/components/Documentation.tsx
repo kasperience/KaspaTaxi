@@ -20,12 +20,7 @@ const Documentation = () => {
         setTimeout(() => {
           element.scrollIntoView({ behavior: 'smooth' });
 
-          // Add a visual highlight effect
-          const originalBackground = element.style.backgroundColor;
-          element.style.backgroundColor = 'rgba(241, 196, 15, 0.2)'; // Light yellow highlight
-          setTimeout(() => {
-            element.style.backgroundColor = originalBackground;
-          }, 2000);
+          // Scroll to the element without highlighting
         }, 100);
       }
     }
@@ -41,12 +36,7 @@ const Documentation = () => {
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
 
-        // Add a visual highlight effect
-        const originalBackground = element.style.backgroundColor;
-        element.style.backgroundColor = 'rgba(241, 196, 15, 0.2)'; // Light yellow highlight
-        setTimeout(() => {
-          element.style.backgroundColor = originalBackground;
-        }, 2000);
+        // Scroll to the element without highlighting
 
         // Update the URL without triggering a page reload
         window.history.pushState(null, '', href);
