@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
-import { CarTaxiFront as Taxi, CreditCard, Shield, MapPin, Wallet, Navigation, MessageSquare } from 'lucide-react';
-import { Github, Twitter } from 'lucide-react';
+import { CarTaxiFront as Taxi, CreditCard, Shield, MapPin, Wallet, Navigation, MessageSquare, Github, Twitter } from 'lucide-react';
 import DriverApp from './components/DriverApp';
 import WebApp from './components/WebApp';
 import TermsOfService from './components/TermsOfService';
@@ -12,6 +11,7 @@ import Contributing from './components/Contributing';
 import Readme from './components/Readme';
 import License from './components/License';
 import EmailQuoteButton from './components/EmailQuoteButton';
+import PrivacyBanner from './components/PrivacyBanner';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -182,11 +182,14 @@ const LandingPage = () => {
                 <span className="text-xl font-bold">Kaspa<span className="font-normal text-[#F1C40F] bg-black px-1 rounded">Taxi</span></span>
               </div>
               <p className="text-gray-400 text-sm">Decentralized ride-booking on the Kaspa blockchain.</p>
-              <p className="text-gray-400 mt-2 text-sm">
-                <a href="https://kaspataxi.KASperience.xyz" className="hover:text-white transition-colors">
-                  Official Demo
+              <div className="text-gray-400 mt-2 text-sm flex flex-col gap-1">
+                <a href="/app" className="hover:text-white transition-colors">
+                  Rider App
                 </a>
-              </p>
+                <a href="/driver" className="hover:text-white transition-colors">
+                  Driver App
+                </a>
+              </div>
               {/* Add the FooterDonation component here */}
               <FooterDonation />
             </div>
@@ -238,6 +241,12 @@ const LandingPage = () => {
 
 
 function App() {
+  // We don't need to track the state here since the component handles it internally
+  const handlePrivacyAccept = () => {
+    // This function is passed to the PrivacyBanner component
+    // The banner component will handle setting the localStorage value
+  };
+
   return (
     <Router>
       <Routes>
@@ -251,6 +260,7 @@ function App() {
         <Route path="/readme" element={<Readme />} />
         <Route path="/license" element={<License />} />
       </Routes>
+      <PrivacyBanner onAccept={handlePrivacyAccept} />
     </Router>
   );
 };

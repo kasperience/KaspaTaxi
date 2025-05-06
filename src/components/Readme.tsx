@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom'; // Import useLocation
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw'; // Allows rendering raw HTML from markdown
+import CopyableCodeBlock from './CopyableCodeBlock';
 
 // Custom heading components to handle specific IDs
 const createHeadingComponent = (level: number) => {
@@ -92,6 +93,19 @@ const Readme = () => {
               h4: createHeadingComponent(4),
               h5: createHeadingComponent(5),
               h6: createHeadingComponent(6),
+              code: ({inline, children, ...props}: any) => {
+                // Only apply CopyableCodeBlock to non-inline code blocks
+                if (inline) {
+                  return <code className="bg-gray-100 px-1 py-0.5 rounded text-red-600" {...props}>{children}</code>;
+                }
+
+                // For block code, use our CopyableCodeBlock component
+                return (
+                  <CopyableCodeBlock>
+                    {String(children).replace(/\n$/, '')}
+                  </CopyableCodeBlock>
+                );
+              }
             }}
           >
             {content}

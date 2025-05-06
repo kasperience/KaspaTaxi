@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/taxi-icon.png" alt="KaspaTaxi Logo" width="100" height="100">
+  <img src="src/assets/taxi-icon.png" alt="KaspaTaxi Logo" width="100" height="100">
   <h1>KaspaTaxi</h1>
   <p><strong>Decentralized Ride-Booking leveraging Kaspa</strong></p>
   <p>
@@ -33,7 +33,7 @@ Experience the current KaspaTaxi MVP in action: [kaspataxi.KASperience.xyz](http
 
 ## Key Features (MVP - Currently Functional)
 
-*   **User Authentication:** Secure login using Google Authentication (centralized for ease of onboarding in the MVP).
+*   **User Authentication:** Secure login using Google Authentication (centralized for ease of onboarding in the MVP). In the future, we plan to investigate decentralized identity solutions for user authentication.
 *   **Map Integration:** Uses OpenStreetMap for visualizing locations and potential routes.
 *   **Ride Request:** Riders can specify pickup and drop-off points to simulate a ride request.
 *   **Driver View:** Drivers can see simulated nearby ride requests and accept/reject them.
@@ -51,7 +51,6 @@ Experience the current KaspaTaxi MVP in action: [kaspataxi.KASperience.xyz](http
 *   **Reputation System:** Explore building an on-chain or decentralized reputation system for drivers and riders.
 *   **In-App Communication:** Add chat functionality between rider and driver.
 *   **Fare Calculation:** Implement more dynamic fare calculation based on distance, time, etc.
-*   **Decentralized Identity:** Investigate decentralized identity solutions for user authentication.
 
 ## Technology Stack
 
@@ -210,7 +209,7 @@ Support KaspaTaxi's development!
 **Scan the QR Code or Copy the Address:**
 
 <div align="center">
-  <img src="/assets/qr-code.png" alt="Kaspa Donation QR Code" width="200"/>
+  <img src="src/assets/qr-code.png" alt="Kaspa Donation QR Code" width="200"/>
 </div>
 
 ```

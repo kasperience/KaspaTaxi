@@ -32,8 +32,8 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
     headerColor = 'bg-[#1ABC9C]'; // info (teal - matching app's primary color)
     confirmBtnColor = 'bg-[#1ABC9C] hover:bg-[#16a085]';
   } else if (type === 'success') {
-    headerColor = 'bg-[#2ECC71]'; // success (green)
-    confirmBtnColor = 'bg-[#2ECC71] hover:bg-[#27AE60]';
+    headerColor = 'bg-[#1ABC9C]'; // success (teal - matching app's primary color)
+    confirmBtnColor = 'bg-[#1ABC9C] hover:bg-[#16a085]';
   }
 
   return (
