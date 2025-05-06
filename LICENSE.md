@@ -6,7 +6,7 @@ KaspaTaxi is available under a dual licensing model:
 
 ### 1. MIT License (for Kaspa Blockchain Use Only)
 
-Copyright (c) 2024 KaspaTaxi
+Copyright (c) 2025 KaspaTaxi
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
