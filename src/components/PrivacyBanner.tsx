@@ -1,5 +1,6 @@
 // src/components/PrivacyBanner.tsx
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 interface PrivacyBannerProps {
   onAccept: () => void;
@@ -39,26 +40,26 @@ const PrivacyBanner: React.FC<PrivacyBannerProps> = ({ onAccept }) => {
           </div>
           <div className="flex flex-col md:flex-row gap-4 mt-3 md:mt-0">
             <div className="flex flex-wrap gap-x-4 gap-y-2 items-center">
-              <a
-                href="/privacy"
+              <Link
+                to="/privacy"
                 className="text-white hover:text-[#F1C40F] text-sm font-medium underline"
               >
                 Privacy Policy
-              </a>
+              </Link>
               <span className="text-white text-xs hidden md:inline">•</span>
-              <a
-                href="/cookies"
+              <Link
+                to="/cookies"
                 className="text-white hover:text-[#F1C40F] text-sm font-medium underline"
               >
                 Cookie Policy
-              </a>
+              </Link>
               <span className="text-white text-xs hidden md:inline">•</span>
-              <a
-                href="/terms"
+              <Link
+                to="/terms"
                 className="text-white hover:text-[#F1C40F] text-sm font-medium underline"
               >
                 Terms of Service
-              </a>
+              </Link>
             </div>
             <button
               onClick={handleAccept}
