@@ -3,6 +3,8 @@ import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { CarTaxiFront as Taxi, CreditCard, Shield, MapPin, Wallet, Navigation, MessageSquare } from 'lucide-react';
 import CopyableCodeBlock from './CopyableCodeBlock';
+import taxiIconSrc from '../assets/taxi-icon.png';
+import qrCodeSrc from '../assets/qr-code.png';
 
 const Documentation = () => {
   const location = useLocation();
@@ -47,8 +49,8 @@ const Documentation = () => {
     <div className="bg-gray-100 min-h-screen p-4 md:p-8" id="documentation-top">
       <div className="bg-white shadow-md rounded-lg p-6 md:p-10 max-w-4xl mx-auto">
         <div className="prose max-w-none">
-          <div align="center">
-            <img src="/src/assets/taxi-icon.png" alt="KaspaTaxi Logo" width="200" />
+          <div className="text-center flex flex-col items-center">
+            <img src={taxiIconSrc} alt="KaspaTaxi Logo" width="200" className="mx-auto" />
             <h1 className="text-3xl font-bold mb-6 text-gray-900">KaspaTaxi</h1>
             <p className="mb-4">A decentralized ride-hailing platform built on the Kaspa blockchain</p>
           </div>
@@ -248,8 +250,12 @@ yarn dev`}
             If you find KaspaTaxi useful and would like to support its development, please consider donating Kaspa to:
           </p>
 
+          <div className="flex flex-col items-center mb-6">
+            <img src={qrCodeSrc} alt="Kaspa Donation QR Code" width="200" className="mx-auto mb-4" />
+          </div>
+
           <CopyableCodeBlock>
-            kaspa:qzk3uh52hx0hnsuvdq7g2xdwdczn7xn6f8afuqe7p7uw8r4lx9ydgscqfzwql
+            kaspa:qr02ac46a6zwqzxgp97lcjw3th4f70x9mq24jsk6vgfmvvhy39lpyksqj24y5
           </CopyableCodeBlock>
 
           <div className="mt-8 flex flex-col md:flex-row justify-between items-start md:items-center">

@@ -39,11 +39,6 @@ echo "Copying client files..."
 # Copy static files to the web root
 sudo cp -r dist/* /var/www/html3/
 
-echo "Fixing image paths in Markdown files..."
-sudo sed -i 's|src="src/assets/taxi-icon.png"|src="assets/taxi-icon.png"|g' /var/www/html3/README.md
-sudo sed -i 's|src="src/assets/qr-code.png"|src="assets/qr-code.png"|g' /var/www/html3/README.md
-sudo sed -i 's|src="src/assets/|src="assets/|g' /var/www/html3/*.md
-
 echo "Starting the server with PM2..."
 cd /var/www/html3/server
 pm2 start index.js --name kaspataxi-server --update-env

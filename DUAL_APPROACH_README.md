@@ -1,7 +1,7 @@
 # KaspaTaxi
 
 <div align="center">
-  <img src="src/assets/taxi-icon.png" alt="KaspaTaxi Logo" width="100" height="100">
+  <img src="./assets/taxi-icon.png" alt="KaspaTaxi Logo" width="100" height="100">
   <h1>KaspaTaxi</h1>
   <p><strong>Decentralized Ride-Booking leveraging Kaspa</strong></p>
 </div>

@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="src/assets/taxi-icon.png" alt="KaspaTaxi Logo" width="100" height="100">
+  <img src="./assets/taxi-icon.png" alt="KaspaTaxi Logo" width="100" height="100">
   <h1>KaspaTaxi</h1>
   <p><strong>Decentralized Ride-Booking leveraging Kaspa</strong></p>
   <p>
@@ -129,7 +129,7 @@ Experience the current KaspaTaxi MVP in action: [kaspataxi.KASperience.xyz](http
 
 ## Customization
 
-*   **Branding:** Replace `src/assets/taxi-icon.png`, modify colors in `tailwind.config.js`.
+*   **Branding:** Replace the logo in `src/assets/taxi-icon.png`, modify colors in `tailwind.config.js`.
 *   **Features:** Add/modify components in `src/components`. Adjust Firestore data structures as needed.
 
 ## Contribution Guidelines
@@ -209,7 +209,7 @@ Support KaspaTaxi's development!
 **Scan the QR Code or Copy the Address:**
 
 <div align="center">
-  <img src="src/assets/qr-code.png" alt="Kaspa Donation QR Code" width="200"/>
+  <img src="./assets/qr-code.png" alt="Kaspa Donation QR Code" width="200"/>
 </div>
 
 ```
