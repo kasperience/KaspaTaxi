@@ -13,6 +13,7 @@ import License from './components/License';
 import EmailQuoteButton from './components/EmailQuoteButton';
 import PrivacyBanner from './components/PrivacyBanner';
 import Features from './components/Features';
+import taxiGif from './assets/clip.gif';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -57,6 +58,7 @@ const LandingPage = () => {
             <p className="text-xl md:text-2xl text-white mb-8">
               Ride smart, pay smart
             </p>
+
             <div className="flex flex-col sm:flex-row justify-center gap-4 mb-6">
               <button
               onClick={handleBookRideClick}
@@ -176,6 +178,9 @@ const LandingPage = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-8">
             Ready to Transform Your Ride Experience?
           </h2>
+          <div className="flex justify-center mb-10">
+            <img src={taxiGif} alt="KaspaTaxi in action" className="rounded-lg shadow-xl max-w-full md:max-w-3xl" />
+          </div>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link to="/app" className="bg-[#F1C40F] text-gray-900 px-8 py-3 rounded-lg font-semibold hover:bg-[#F39C12] transition-colors">
               Book a Ride Now

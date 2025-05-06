@@ -22,6 +22,10 @@ KaspaTaxi is an open-source project demonstrating a decentralized, transparent, 
 
 Experience the current KaspaTaxi MVP in action: [kaspataxi.KASperience.xyz](https://kaspataxi.KASperience.xyz)
 
+<div align="center">
+  <img src="./assets/clip.gif" alt="KaspaTaxi in action" width="600"/>
+</div>
+
 *Note: The MVP focuses on demonstrating the core user interface, ride flow, and direct Kaspa payment initiation. Deeper blockchain integration and backend automation are planned for future phases.*
 
 ## Why Kaspa? (Our Vision)
