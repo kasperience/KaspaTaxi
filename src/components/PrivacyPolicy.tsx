@@ -1,76 +1,98 @@
-import React from 'react';
+// src/components/PrivacyBanner.tsx
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { CarTaxiFront as Taxi, ArrowLeft } from 'lucide-react';
 
-const PrivacyPolicy = () => {
+interface PrivacyBannerProps {
+  onAccept: () => void;
+}
+
+const PrivacyBanner: React.FC<PrivacyBannerProps> = ({ onAccept }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  useEffect(() => {
+    // Check if user has already accepted the policy
+    const hasAccepted = localStorage.getItem('privacyPolicyAccepted') === 'true';
+    if (!hasAccepted) {
+      setIsVisible(true);
+    }
+  }, []);
+
+  const handleAccept = () => {
+    localStorage.setItem('privacyPolicyAccepted', 'true');
+    setIsVisible(false);
+    onAccept();
+  };
+
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  if (!isVisible) return null;
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-[#1ABC9C] text-white p-6">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Taxi className="h-6 w-6" />
-            <span className="text-xl font-bold">Kaspa<span className="font-normal text-[#F1C40F] bg-black px-1 rounded">Taxi</span></span>
+    <div className="fixed bottom-0 left-0 right-0 bg-[#1ABC9C] text-white p-4 shadow-lg z-50 animate-slideUp border-t-4 border-[#F1C40F]">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex flex-col items-start md:items-center justify-between gap-4">
+          <div className="flex-1">
+            {isExpanded ? (
+              <>
+                <h3 className="text-lg font-bold mb-2">Privacy Notice</h3>
+                <p className="text-sm leading-relaxed">
+                  By using KaspaTaxi, you acknowledge and accept our Privacy Policy,
+                  Cookie Policy, and Terms of Service. We collect and process location data to provide ride services, use cookies for
+                  essential functionality, and share necessary data with drivers. We use third-party map services (Mapbox) which has
+                  its own privacy policy. Email addresses are collected for authentication and account management purposes only.
+                </p>
+              </>
+            ) : (
+              <p className="text-sm leading-relaxed">
+                We use cookies, location data, and third-party services to provide our ride services.{' '}
+                <button
+                  onClick={toggleExpand}
+                  className="text-[#F1C40F] hover:text-white font-medium underline inline-flex items-center"
+                >
+                  ... Details
+                </button>
+              </p>
+            )}
           </div>
-          <Link to="/" className="flex items-center text-white hover:text-[#F1C40F]">
-            <ArrowLeft className="h-4 w-4 mr-1" /> Back to Home
-          </Link>
+          <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
+            {isExpanded && (
+              <div className="flex flex-wrap gap-x-4 gap-y-2 items-center">
+                <Link
+                  to="/privacy"
+                  className="text-white hover:text-[#F1C40F] text-sm font-medium underline"
+                >
+                  Privacy Policy
+                </Link>
+                <span className="text-white text-xs hidden md:inline">•</span>
+                <Link
+                  to="/cookies"
+                  className="text-white hover:text-[#F1C40F] text-sm font-medium underline"
+                >
+                  Cookie Policy
+                </Link>
+                <span className="text-white text-xs hidden md:inline">•</span>
+                <Link
+                  to="/terms"
+                  className="text-white hover:text-[#F1C40F] text-sm font-medium underline"
+                >
+                  Terms of Service
+                </Link>
+              </div>
+            )}
+            <button
+              onClick={handleAccept}
+              className="bg-[#F1C40F] hover:bg-[#F39C12] text-gray-900 px-5 py-2 rounded-lg text-sm font-bold transition-colors whitespace-nowrap shadow-md w-full md:w-auto"
+            >
+              Accept
+            </button>
+          </div>
         </div>
-      </header>
-
-      <main className="max-w-4xl mx-auto p-6 bg-white my-8 rounded-lg shadow">
-        <h1 className="text-3xl font-bold mb-6">Privacy Policy</h1>
-
-        <section className="mb-6">
-          <h2 className="text-xl font-semibold mb-3">Introduction</h2>
-          <p className="mb-4">This Privacy Policy describes how Kaspa Taxi ("we," "us," or "our") collects, uses, and protects the information of users ("you" or "your") who use the Kaspa Taxi application (the "App"). We are committed to protecting your privacy and ensuring the security of your personal information.</p>
-        </section>
-
-        <section className="mb-6">
-          <h2 className="text-xl font-semibold mb-3">Information We Collect</h2>
-          <p className="mb-4">As an open-source project, Kaspa Taxi values transparency and user control. We strive to minimize data collection. However, certain information may be collected to provide core functionality and improve user experience.</p>
-
-          <h3 className="text-lg font-medium mt-4 mb-2">Information You Provide Directly</h3>
-          <ul className="list-disc pl-6 mb-3">
-            <li className="mb-1">Account Information: While our current setup does not require user accounts, if accounts are implemented in the future, we may collect information like usernames and email addresses.</li>
-            <li className="mb-1">Location Data: The App may collect your location data to provide taxi services. This data is essential for connecting drivers and riders.</li>
-            <li className="mb-1">Payment information: When implemented users will provide a way to pay for the service.</li>
-            <li className="mb-1">Communications: Any communications you have with us, such as through feedback forms or support requests.</li>
-          </ul>
-
-          <h3 className="text-lg font-medium mt-4 mb-2">Information Collected Automatically</h3>
-          <ul className="list-disc pl-6 mb-3">
-            <li className="mb-1">Usage Data: Information about how you interact with the App, such as the features you use and the time and duration of your interactions.</li>
-            <li className="mb-1">Device Information: Details about the device you use to access the App, such as the device type, operating system, and unique device identifiers.</li>
-            <li className="mb-1">Technical Information: Error logs and other technical data to aid in debugging and improving the application.</li>
-          </ul>
-        </section>
-
-        {/* Additional sections would follow */}
-        <section className="mb-6">
-          <h2 className="text-xl font-semibold mb-3">How We Use Your Information</h2>
-          <p className="mb-4">We use the information we collect for the following purposes:</p>
-          <ul className="list-disc pl-6 mb-3">
-            <li className="mb-1">Providing Services: To facilitate taxi services, connect drivers and riders, and manage payment processing.</li>
-            <li className="mb-1">Improving the App: To analyze usage patterns, identify bugs, and enhance the functionality and user experience of the App.</li>
-            <li className="mb-1">Customer Support: To respond to your inquiries and provide support.</li>
-            <li className="mb-1">Security: To monitor and protect the App against fraud and unauthorized access.</li>
-            <li className="mb-1">Communications: To communicate with you regarding updates, new features, and important notices.</li>
-          </ul>
-        </section>
-
-        <section className="mb-6">
-          <h2 className="text-xl font-semibold mb-3">Contact Us</h2>
-          <p className="mb-4">If you have any questions or concerns about this Privacy Policy, please contact us at: <a href="mailto:dev@KASperience.xyz" className="text-[#1ABC9C] hover:text-[#16a085] font-medium">dev@KASperience.xyz</a></p>
-        </section>
-      </main>
-
-      <footer className="bg-gray-900 text-white py-6">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <p>© 2025 KASperience. All rights reserved.</p>
-        </div>
-      </footer>
+      </div>
     </div>
   );
 };
 
-export default PrivacyPolicy;
+export default PrivacyBanner;

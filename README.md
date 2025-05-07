@@ -161,27 +161,33 @@ Experience the current KaspaTaxi MVP in action: [kaspataxi.KASperience.xyz](http
 3. **Set up Client Environment Variables:**
    - Create a `.env` file in the project root with the following variables:
    ```
-   VITE_FIREBASE_API_KEY=your_firebase_api_key
-   VITE_FIREBASE_AUTH_DOMAIN=your_firebase_auth_domain
-   VITE_FIREBASE_PROJECT_ID=your_firebase_project_id
-   VITE_FIREBASE_STORAGE_BUCKET=your_firebase_storage_bucket
-   VITE_FIREBASE_MESSAGING_SENDER_ID=your_firebase_messaging_sender_id
-   VITE_FIREBASE_APP_ID=your_firebase_app_id
+   VITE_FIREBASE_API_KEY=api_key_for_firebase_auth
+   VITE_FIREBASE_AUTH_DOMAIN=auth_domain_for_firebase
+   VITE_FIREBASE_PROJECT_ID=project_id_for_firebase
+   VITE_FIREBASE_DATABASE_URL=database_url_for_firebase
+   # Most Firebase configuration has been moved to the server
+   # See server/.env for API keys and configuration
+   # The MapTiler API key has been moved to the server
    ```
 
 4. **Set up Server:**
    ```bash
-   # Navigate to the server directory
+   ## Navigate to the server directory
    cd server
-
    # Install server dependencies
    npm install
-
    # Create .env file with API keys
    # Example content:
    PORT=3001
-   MAPTILER_API_KEY=your_maptiler_api_key
-
+   MAPTILER_API_KEY=maptiler_key_for_mapping
+   FIREBASE_API_KEY=api_key_for_firebase_server
+   FIREBASE_AUTH_DOMAIN=auth_domain_for_firebase_server
+   FIREBASE_DATABASE_URL=database_url_for_firebase_server
+   FIREBASE_PROJECT_ID=project_id_for_firebase_server
+   FIREBASE_STORAGE_BUCKET=storage_bucket_for_firebase
+   FIREBASE_MESSAGING_SENDER_ID=messaging_sender_id_for_firebase
+   FIREBASE_APP_ID=app_id_for_firebase
+   FIREBASE_MEASUREMENT_ID=measurement_id_for_firebase
    # Return to the main directory
    cd ..
    ```

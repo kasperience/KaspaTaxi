@@ -45,7 +45,7 @@ const Features = () => {
           <h1 className="text-3xl font-bold mb-6 text-gray-900">KaspaTaxi Features</h1>
 
           <p className="mb-6">
-            KaspaTaxi is a decentralized ride-hailing platform built on the Kaspa blockchain.
+            KaspaTaxi is a decentralized ride-booking platform built on the Kaspa blockchain.
             It enables direct peer-to-peer transactions between riders and drivers without intermediaries,
             reducing fees and increasing earnings for drivers.
           </p>

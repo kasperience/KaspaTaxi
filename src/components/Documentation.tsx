@@ -52,7 +52,7 @@ const Documentation = () => {
           <div className="text-center flex flex-col items-center">
             <img src={taxiIconSrc} alt="KaspaTaxi Logo" width="200" className="mx-auto" />
             <h1 className="text-3xl font-bold mb-6 text-gray-900">KaspaTaxi</h1>
-            <p className="mb-4">A decentralized ride-hailing platform built on the Kaspa blockchain</p>
+            <p className="mb-4">A decentralized ride-booking platform built on the Kaspa blockchain</p>
           </div>
 
           <div className="mb-8">
@@ -86,7 +86,7 @@ const Documentation = () => {
           <h2 className="text-2xl font-bold mb-4 text-gray-900" id="overview">Overview</h2>
 
           <p className="mb-6">
-            KaspaTaxi is a decentralized ride-hailing platform that enables direct peer-to-peer transactions between riders and drivers without intermediaries, reducing fees and increasing earnings for drivers.
+            KaspaTaxi is a decentralized ride-booking platform that enables direct peer-to-peer transactions between riders and drivers without intermediaries, reducing fees and increasing earnings for drivers.
           </p>
 
           <p className="mb-6">
@@ -260,9 +260,8 @@ git checkout server`}
 {`VITE_FIREBASE_API_KEY=your_firebase_api_key
 VITE_FIREBASE_AUTH_DOMAIN=your_firebase_auth_domain
 VITE_FIREBASE_PROJECT_ID=your_firebase_project_id
-VITE_FIREBASE_STORAGE_BUCKET=your_firebase_storage_bucket
-VITE_FIREBASE_MESSAGING_SENDER_ID=your_firebase_messaging_sender_id
-VITE_FIREBASE_APP_ID=your_firebase_app_id`}
+VITE_FIREBASE_DATABASE_URL=your_firebase_database_url
+`}
                 </CopyableCodeBlock>
               </li>
               <li className="mb-4">
@@ -278,6 +277,9 @@ npm install
 # Example content:
 PORT=3001
 MAPTILER_API_KEY=your_maptiler_api_key
+FIREBASE_STORAGE_BUCKET=your_firebase_storage_bucket
+FIREBASE_MESSAGING_SENDER_ID=your_firebase_messaging_sender_id
+FIREBASE_APP_ID=your_firebase_app_id
 
 # Return to the main directory
 cd ..`}
