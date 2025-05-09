@@ -253,72 +253,34 @@ firebase deploy --only firestore:rules
 
 ### Firestore Security Rules Details
 
-The `firestore.rules` file provides a set of security rules critical for protecting your Firestore data. These rules ensure that users can only access and modify data they are authorized to work with.
+The `kaspaTaxi/firestore.rules` file provides a baseline set of security rules critical for protecting your Firestore data. It starts by denying all access and then explicitly allows operations based on user authentication and roles.
 
-**Current Implemented Rules:**
+**Key Assumptions Made in the Provided Rules:**
 
-```
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    // Rides collection
-    match /rides/{rideId} {
-      // Allow riders to read their own rides
-      allow read: if request.auth != null && resource.data.riderId == request.auth.uid;
+*   **`users` Collection:** Stores user profiles keyed by Firebase Auth UID. Contains fields like `isDriver` (boolean) and potentially `kaspaAddress`.
+*   **`rides` Collection:** Stores ride details, including `riderId` (UID of the requesting user) and `driverId` (UID of the accepting driver, initially null).
+*   **Authentication:** Rules heavily rely on `request.auth` to check if a user is logged in (`request.auth != null`) and who they are (`request.auth.uid`).
 
-      // Allow drivers to read rides they've accepted
-      allow read: if request.auth != null && resource.data.driverId == request.auth.uid;
+**Summary of Provided Rules (`users` collection):**
 
-      // Allow authenticated users to read pending rides (so drivers can see available requests)
-      allow read: if request.auth != null && resource.data.status == 'pending';
+*   **Read:** Users can read their own profile. Authenticated users can read profiles marked as `isDriver = true` (consider restricting which fields are publicly readable).
+*   **Create:** Users can create their own profile document.
+*   **Update:** Users can update their own profile. (Validation to prevent unauthorized changes like self-assigning `isDriver` status is recommended).
+*   **Delete:** Disallowed from the client.
 
-      // Allow riders to create rides
-      allow create: if request.auth != null && request.resource.data.riderId == request.auth.uid;
+**Summary of Provided Rules (`rides` collection):**
 
-      // Allow drivers to update rides they've accepted
-      allow update: if request.auth != null && resource.data.driverId == request.auth.uid;
-
-      // Allow riders to cancel their own pending rides
-      allow update: if request.auth != null &&
-                     resource.data.riderId == request.auth.uid &&
-                     resource.data.status == 'pending' &&
-                     request.resource.data.status == 'cancelled';
-    }
-
-    // Users collection
-    match /users/{userId} {
-      // Users can read and write only their own documents
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
-  }
-}
-```
-
-**Key Assumptions in These Rules:**
-
-*   **`users` Collection:** Stores user profiles keyed by Firebase Auth UID.
-*   **`rides` Collection:** Stores ride details, including `riderId` (UID of the requesting user) and `driverId` (UID of the accepting driver).
-*   **Authentication:** Rules rely on `request.auth` to check if a user is logged in (`request.auth != null`) and who they are (`request.auth.uid`).
-
-**Summary of Rules:**
-
-*   **Users Collection:**
-    * Users can only read and write their own documents
-    * This protects user privacy and prevents unauthorized profile modifications
-
-*   **Rides Collection:**
-    * Riders can only read rides they've requested
-    * Drivers can only read rides they've accepted
-    * Any authenticated user can read pending rides (so drivers can see available requests)
-    * Riders can create new ride requests (with their own ID as the rider)
-    * Drivers can update rides they've accepted (to change status, etc.)
-    * Riders can cancel their own pending rides
+*   **Read:** The rider or assigned driver can read a ride document. Any authenticated user can read rides with `status = 'pending'` (allowing drivers to see requests).
+*   **Create:** Authenticated users can create rides for themselves (`riderId` must match their UID), setting initial status to `pending` and ensuring basic fields exist.
+*   **Update:** Allows specific state transitions based on user roles (driver accepting, rider/driver cancelling, driver updating status). Further validation (e.g., checking `isDriver` status via `get()`) might be necessary.
+*   **Delete:** Disallowed from the client.
 
 **IMPORTANT:**
 
+*   **Review & Customize:** These rules are a starting point. **You MUST review and adapt them** to match your exact Firestore data structure, field names (`riderId`, `driverId`, etc.), and application logic (status values, allowed transitions).
 *   **Test Thoroughly:** Use the Firebase Emulator Suite or a test project to verify these rules prevent unauthorized access and allow legitimate operations.
-*   **Additional Rules:** You may need to add rules for other collections or more complex operations as your application grows.
-*   **Deployment:** Deploy the rules using `firebase deploy --only firestore:rules` as described in the Getting Started section.
+*   **Other Collections:** Add rules for any other collections you use (e.g., `driverLocations`).
+*   **Deployment:** Deploy the final rules using `firebase deploy --only firestore:rules` as described in the Getting Started section.
 
 ## Disclaimer
 
