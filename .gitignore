@@ -24,8 +24,10 @@ dist-ssr
 *.sw?
 .env
 .env.*
+!.env.example
 server/.env
 server/.env.*
+!server/.env.example
 kaspataxi-adc325c9b727.json
 kaspataxi-firebase-adminsdk-fbsvc-ebbbb8287a.json
 .continue/mcpServers/new-mcpServer.yaml
